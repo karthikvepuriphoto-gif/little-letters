@@ -6,8 +6,13 @@
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png">
 <title>Little Letters</title>
 <style>
+@font-face{font-family:"NotoTe";src:url("NotoSansTelugu-Bold-subset.woff2") format("woff2");unicode-range:U+0C00-0C7F,U+200C-200D,U+25CC;font-display:swap}
+#langBtn{font-size:28px;padding:0 20px;background:#ffe08a;font-weight:800}
+#bubble{position:fixed;left:50%;top:90px;transform:translateX(-50%) scale(.6);opacity:0;background:#fff;border:4px solid #ffb3d1;border-radius:30px;padding:14px 26px;font-size:34px;z-index:61;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
+#bubble.show{opacity:1;transform:translateX(-50%) scale(1)}
+.te{font-family:"NotoTe",sans-serif}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-html,body{margin:0;height:100%;overscroll-behavior:none;font-family:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold","Nunito","Comic Sans MS",system-ui,sans-serif;background:linear-gradient(#fff0f6,#e3f2fd);color:#4a3b6b;-webkit-touch-callout:none}
+html,body{margin:0;height:100%;overscroll-behavior:none;font-family:"NotoTe",ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold","Nunito","Comic Sans MS",system-ui,sans-serif;background:linear-gradient(#fff0f6,#e3f2fd);color:#4a3b6b;-webkit-touch-callout:none}
 button{font-family:inherit;border:0;border-radius:22px;background:#fff;color:#4a3b6b;font-size:28px;min-width:64px;min-height:64px;box-shadow:0 5px 0 rgba(0,0,0,.12);cursor:pointer;touch-action:manipulation}
 button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.12)}
 button.on{outline:5px solid #ff4fa3}
@@ -92,10 +97,10 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 .bgp{font-size:22px!important}
 @media (orientation:landscape){#pal,#dopts{flex-wrap:nowrap!important;overflow-x:auto;touch-action:pan-x}#draw .sw{width:48px;min-width:48px!important;height:48px;min-height:48px!important}#draw button{min-width:54px;min-height:54px;font-size:26px}#draw .bar{padding:6px 0}}
 </style></head><body>
-<canvas id="fx"></canvas><div id="toast"></div>
+<canvas id="fx"></canvas><div id="toast"></div><div id="bubble"></div>
 
 <section class="scr" id="home">
- <div class="bar"><h1>✏️ Little Letters</h1><span class="sp"></span><span class="stars">⭐ 0</span><button id="voiceBtn" title="Voice">🗣️</button><button id="musicBtn" title="Music">🎵</button></div>
+ <div class="bar"><h1>✏️ Little Letters</h1><span class="sp"></span><button id="langBtn" class="lang">తెలుగు</button><span class="stars">⭐ 0</span><button id="voiceBtn" title="Voice">🗣️</button><button id="musicBtn" title="Music">🎵</button></div>
  <div class="hub">
   <button class="c1" data-go="letters" aria-label="Letters">✏️<small>ABC 123</small></button>
   <button class="c2" data-go="words" aria-label="Words">🐱<small>cat dog</small></button>
@@ -240,7 +245,7 @@ function strokePts(s){const pts=[];for(const part of s.split("|")){const t=part.
  else{const p=t.map(v=>v.split(",").map(Number));for(let i=0;i<p.length;i++){if(i===0){pts.push(p[0]);continue}const[a,b]=[p[i-1],p[i]],d=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(1,Math.ceil(d/3));for(let k=1;k<=n;k++)pts.push([a[0]+(b[0]-a[0])*k/n,a[1]+(b[1]-a[1])*k/n])}}}
  return pts}
 // Glyph for a character or a number like "12" -> two digits side by side.
-function glyph(ch){if(G[ch])return{w:100,strokes:G[ch].map(strokePts)};
+function glyph(ch){if(/[\u0C00-\u0C7F]/.test(ch))return{w:100,font:true,ch,strokes:[]};if(G[ch])return{w:100,strokes:G[ch].map(strokePts)};
  const parts=[...String(ch)];const out=[];parts.forEach((c,i)=>{for(const s of G[c])out.push(strokePts(s).map(([x,y])=>[x*.72+i*68,y]))});return{w:parts.length*68+4,strokes:out}}
 "use strict";
 // ---------- data ----------
@@ -253,15 +258,31 @@ const KEY="littleletters_v1";
 const S=Object.assign({stars:0,traced:{},free:{},words:{},gallery:[],music:true,voice:true,stamp:"⭐"},JSON.parse(localStorage.getItem(KEY)||"{}"));
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast("💾 Gallery is full. Delete an old picture.")}};
 const $=s=>document.querySelector(s);
+
+// ---------- Telugu ----------
+const TE_V=["అ","ఆ","ఇ","ఈ","ఉ","ఊ","ఋ","ఎ","ఏ","ఐ","ఒ","ఓ","ఔ","అం","అః"];
+const TE_C=["క","ఖ","గ","ఘ","ఙ","చ","ఛ","జ","ఝ","ఞ","ట","ఠ","డ","ఢ","ణ","త","థ","ద","ధ","న","ప","ఫ","బ","భ","మ","య","ర","ల","వ","శ","ష","స","హ","ళ","క్ష","ఱ"];
+const TE_N=["౦","౧","౨","౩","౪","౫","౬","౭","౮","౯","౧౦"];
+const TE_NUMW=["సున్నా","ఒకటి","రెండు","మూడు","నాలుగు","ఐదు","ఆరు","ఏడు","ఎనిమిది","తొమ్మిది","పది"];
+const TE_INFO={"అ":["అమ్మ","👩"],"ఆ":["ఆవు","🐄"],"ఇ":["ఇల్లు","🏠"],"ఈ":["ఈగ","🪰"],"ఉ":["ఉడుత","🐿️"],"ఊ":["ఊయల","🎠"],"ఋ":["ఋషి","🧘"],"ఎ":["ఎలుక","🐭"],"ఏ":["ఏనుగు","🐘"],"ఐ":["ఐదు","🖐️"],"ఒ":["ఒంటె","🐫"],"ఓ":["ఓడ","🚢"],"ఔ":["ఔషధం","💊"],"అం":["అంగడి","🏪"],
+ "క":["కమలం","🪷"],"ఖ":["ఖర్జూరం","🌴"],"గ":["గడియారం","⏰"],"ఘ":["ఘంట","🔔"],"చ":["చేప","🐟"],"ఛ":["ఛత్రి","☂️"],"జ":["జింక","🦌"],"ట":["టమాట","🍅"],"డ":["డప్పు","🥁"],"త":["తాబేలు","🐢"],"ద":["దీపం","🪔"],"ధ":["ధనుస్సు","🏹"],"న":["నక్క","🦊"],"ప":["పడవ","⛵"],"ఫ":["ఫలం","🍎"],"బ":["బంతి","⚽"],"భ":["భవనం","🏢"],"మ":["మామిడి","🥭"],"ర":["రైలు","🚂"],"ల":["లడ్డు","🍬"],"వ":["విమానం","✈️"],"శ":["శంఖం","🐚"],"స":["సూర్యుడు","☀️"],"హ":["హంస","🦢"]};
+const TE_WORDS=[["అమ్మ","👩",["అ","మ్మ"]],["నాన్న","👨",["నా","న్న"]],["పాలు","🥛",["పా","లు"]],["ఆవు","🐄",["ఆ","వు"]],["కాయ","🥒",["కా","య"]],["పండు","🍌",["పం","డు"]],["చేప","🐟",["చే","ప"]],["కుక్క","🐶",["కు","క్క"]],["పిల్లి","🐱",["పి","ల్లి"]],["నీరు","💧",["నీ","రు"]],["ఇల్లు","🏠",["ఇ","ల్లు"]],["బంతి","⚽",["బం","తి"]],["పువ్వు","🌸",["పు","వ్వు"]],["చెట్టు","🌳",["చె","ట్టు"]],["కోడి","🐔",["కో","డి"]],["గుడ్డు","🥚",["గు","డ్డు"]],["అక్క","👧",["అ","క్క"]],["అన్న","👦",["అ","న్న"]]];
+const TE_CHEER=["బాగుంది!","శభాష్!","చాలా బాగుంది!","అద్భుతం!","భలే!"];
+const isTe=()=>S.lang==="te";const T=(en,te)=>isTe()?te:en;
+S.te=S.te||{traced:{},free:{},words:{}};S.traced=S.traced||{};S.free=S.free||{};S.words=S.words||{};const PR=()=>isTe()?S.te:S;
+const WL=()=>isTe()?TE_WORDS:WORDLIST;const wparts=w=>w[2]||[...w[0]];
+const teNum=s=>TE_N.indexOf(s);
+
 const unlockedStickers=()=>STICKERS.slice(0,4+Math.floor(S.stars/5));
 
 // ---------- voice + sound ----------
-let voice=null;function pickVoice(){const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));voice=vs.find(v=>/Samantha|Karen|Moira|Tessa|Google US English|Female/i.test(v.name))||vs[0]||null}
+let voice=null,teVoice=null;function pickVoice(){const all=speechSynthesis.getVoices(),vs=all.filter(v=>/^en/i.test(v.lang));voice=vs.find(v=>/Samantha|Karen|Moira|Tessa|Google US English|Female/i.test(v.name))||vs[0]||null;teVoice=all.find(v=>/^te/i.test(v.lang))||null}
 if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(t){if(!S.voice||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.rate=.85;u.pitch=1.25;speechSynthesis.speak(u)}catch(e){}}
+function say(t){if(!S.voice)return;if(isTe()&&/[\u0C00-\u0C7F]/.test(t)&&(!window.speechSynthesis||!teVoice)){bubble(t);return}if(!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(isTe()&&teVoice){u.voice=teVoice;u.lang=teVoice.lang}else if(voice)u.voice=voice;u.rate=.85;u.pitch=1.25;speechSynthesis.speak(u)}catch(e){}}
 let AC=null;function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}return AC}
 function ding(notes=[660,880,1100],gap=.09){const a=ac();if(!a)return;const t=a.currentTime;notes.forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.12,t+i*gap);g.gain.exponentialRampToValueAtTime(.001,t+i*gap+.35);o.connect(g);g.connect(a.destination);o.start(t+i*gap);o.stop(t+i*gap+.4)})}
 const boop=()=>ding([300,250],.1);
+function bubble(t){const b=$("#bubble");b.textContent="💬 "+t;b.classList.add("show");clearTimeout(bubble.t);bubble.t=setTimeout(()=>b.classList.remove("show"),2600);ding([784,988],.08)}
 
 // ---------- music (original gentle loops) ----------
 const Music=(()=>{const T={
@@ -285,7 +306,7 @@ function confetti(){const c=$("#fx"),x=c.getContext("2d");c.width=innerWidth;c.h
  (function a(){x.clearRect(0,0,c.width,c.height);for(const p of P){p.vy+=.5;p.x+=p.vx;p.y+=p.vy;if(p.e){x.font="26px sans-serif";x.fillText(p.e,p.x,p.y)}else{x.fillStyle=p.c;x.fillRect(p.x,p.y,p.s,p.s)}}if(++f<90)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})()}
 function addStar(n=1){S.stars+=n;const before=unlockedStickers().length;save();renderStars();if(Math.floor(S.stars/5)!==Math.floor((S.stars-n)/5)&&unlockedStickers().length<=STICKERS.length){const st=unlockedStickers().slice(-1)[0];setTimeout(()=>{toast("🎁 New sticker: "+st);say("You got a new sticker!")},900)}}
 function renderStars(){document.querySelectorAll(".stars").forEach(e=>e.textContent="⭐ "+S.stars)}
-function cheer(){const w=["Great job!","Wow!","You did it!","Super!","Amazing!","Yay!"];return w[Math.floor(Math.random()*w.length)]}
+function cheer(){const w=isTe()?TE_CHEER:["Great job!","Wow!","You did it!","Super!","Amazing!","Yay!"];return w[Math.floor(Math.random()*w.length)]}
 
 // ---------- screens ----------
 function show(id,music){document.querySelectorAll(".scr").forEach(s=>s.classList.toggle("on",s.id===id));if(music)Music.play(music);window.scrollTo(0,0)}
@@ -296,22 +317,25 @@ const DPR=Math.min(2,window.devicePixelRatio||1);
 function sizeCanvas(cv){const r=cv.getBoundingClientRect();cv.width=Math.round(r.width*DPR);cv.height=Math.round(r.height*DPR);return r}
 const TR={chars:[],idx:0,mode:"trace",ink:[],cur:null,g:null,list:[],word:null,wi:0};
 function openTrace(list,i,word){TR.list=list;TR.idx=i;TR.word=word||null;TR.wi=0;TR.mode="trace";show("trace","write");setupTrace()}
-function curChar(){return TR.word?TR.word[0][TR.wi]:TR.list[TR.idx]}
-function setupTrace(){const ch=curChar();TR.g=glyph(ch);TR.ink=[];TR.cur=null;const cv=$("#tcv");sizeCanvas(cv);drawTrace();
+function curChar(){return TR.word?wparts(TR.word)[TR.wi]:TR.list[TR.idx]}
+function setupTrace(){const ch=curChar();TR.g=glyph(ch);TR.ink=[];TR.cur=null;const cv=$("#tcv");sizeCanvas(cv);drawTrace();if(TR.g.font&&document.fonts)document.fonts.load("80px NotoTe",ch).then(()=>{TR.g.mask=false;drawTrace()});
  const isNum=/^\d+$/.test(ch);let label,pic;
- if(TR.word){label=TR.word[0];pic=TR.word[1];$("#tword").innerHTML=[...TR.word[0]].map((c,i)=>`<span class="${i<TR.wi?"done":i===TR.wi?"now":""}">${c}</span>`).join("")}
+ if(TR.word){label=TR.word[0];pic=TR.word[1];$("#tword").innerHTML=wparts(TR.word).map((c,i)=>`<span class="${i<TR.wi?"done":i===TR.wi?"now":""}">${c}</span>`).join("")}
+ else if(isTe()){const n=teNum(ch);if(n>=0){pic="🔵".repeat(n)||"⭕";$("#tword").textContent=TE_NUMW[n]}else{const I=TE_INFO[ch];pic=I?I[1]:"✨";$("#tword").textContent=I?I[0]:ch}}
  else if(isNum){label=ch;pic="🔵".repeat(Math.min(+ch,10))+(+ch>10?" +"+(+ch-10):"");$("#tword").textContent=NUMW[+ch]||ch}
  else{const W=WORDS_FOR[ch.toUpperCase()];label=ch;pic=W[1];$("#tword").textContent=ch.toUpperCase()===ch?W[0][0].toUpperCase()+W[0].slice(1):W[0]}
- $("#tpic").textContent=pic;$("#tmode").textContent=TR.mode==="trace"?"✏️":"🖍️";$("#tnext").classList.toggle("pulse",false);$("#tfree").classList.toggle("hide",TR.mode!=="trace"||!S.traced[ch]);
+ $("#tpic").textContent=pic;$("#tmode").textContent=TR.mode==="trace"?"✏️":"🖍️";$("#tnext").classList.toggle("pulse",false);$("#tfree").classList.toggle("hide",TR.mode!=="trace"||!PR().traced[ch]);
  setTimeout(()=>speakChar(),300)}
-function speakChar(){const ch=curChar();if(TR.word){say(TR.wi===0?"Let's write "+TR.word[0]+". "+ch:ch);return}
+function speakChar(){const ch=curChar();if(TR.word){say(TR.wi===0?T("Let's write ","")+TR.word[0]+". "+ch:ch);return}
+ if(isTe()){const n=teNum(ch);if(n>=0)return say(TE_NUMW[n]);const I=TE_INFO[ch];return say(I?ch+". "+I[0]:ch)}
  if(/^\d+$/.test(ch))return say(NUMW[+ch]||ch);const U=ch.toUpperCase(),W=WORDS_FOR[U];say((ch===U?"Big ":"Little ")+U+". "+U+" says "+SOUND[U]+". "+SOUND[U]+" "+W[0]+".")}
 function layout(){const cv=$("#tcv"),W=cv.width,H=cv.height,g=TR.g;const sc=Math.min(W/(g.w+20),H/125)*.92;const ox=(W-g.w*sc)/2,oy=(H-120*sc)/2+4*DPR;return{sc,ox,oy,W,H}}
 function drawTrace(){const cv=$("#tcv"),x=cv.getContext("2d"),L=layout(),{sc,ox,oy,W,H}=L,P=([a,b])=>[ox+a*sc,oy+b*sc];
  x.clearRect(0,0,W,H);
  // handwriting lines
  x.lineWidth=2*DPR;[[10,"#90caf9",[]],[50,"#f48fb1",[10*DPR,8*DPR]],[90,"#64b5f6",[]],[115,"#e0e0e0",[]]].forEach(([y,c,d])=>{x.strokeStyle=c;x.setLineDash(d);x.beginPath();x.moveTo(0,oy+y*sc);x.lineTo(W,oy+y*sc);x.stroke()});x.setLineDash([]);
- if(TR.mode==="trace"){x.lineCap="round";x.lineJoin="round";
+ if(TR.g.font){fontGuide(x,L)}
+ else if(TR.mode==="trace"){x.lineCap="round";x.lineJoin="round";
   for(const s of TR.g.strokes){x.strokeStyle="#ede7f6";x.lineWidth=sc*14;x.beginPath();s.forEach((p,i)=>{const[a,b]=P(p);i?x.lineTo(a,b):x.moveTo(a,b)});x.stroke();
    x.strokeStyle="#9575cd";x.lineWidth=sc*2.2;x.setLineDash([sc*3,sc*5]);x.beginPath();s.forEach((p,i)=>{const[a,b]=P(p);i?x.lineTo(a,b):x.moveTo(a,b)});x.stroke();x.setLineDash([])}
   TR.g.strokes.forEach((s,i)=>{const[a,b]=P(s[0]);const k=Math.min(s.length-1,4),[c,d]=P(s[k]);const ang=Math.atan2(d-b,c-a);
@@ -319,18 +343,34 @@ function drawTrace(){const cv=$("#tcv"),x=cv.getContext("2d"),L=layout(),{sc,ox,
    x.save();x.translate(a+Math.cos(ang)*sc*12,b+Math.sin(ang)*sc*12);x.rotate(ang);x.fillStyle="#ff7043";x.beginPath();x.moveTo(sc*5,0);x.lineTo(-sc*3,-sc*4);x.lineTo(-sc*3,sc*4);x.fill();x.restore()})}
  x.lineCap="round";x.lineJoin="round";x.strokeStyle="#e91e63";x.lineWidth=sc*7;
  for(const st of TR.ink){if(st.length<2){if(st[0]){x.fillStyle="#e91e63";x.beginPath();x.arc(st[0][0],st[0][1],sc*3.5,0,7);x.fill()}continue}x.beginPath();x.moveTo(st[0][0],st[0][1]);for(let i=1;i<st.length-1;i++){const mx=(st[i][0]+st[i+1][0])/2,my=(st[i][1]+st[i+1][1])/2;x.quadraticCurveTo(st[i][0],st[i][1],mx,my)}const l=st[st.length-1];x.lineTo(l[0],l[1]);x.stroke()}}
+const TEF="NotoTe";
+function fontSetup(L){const g=TR.g;if(g.mask&&g.mw===L.W&&g.mh===L.H)return g;const c=document.createElement("canvas");c.width=L.W;c.height=L.H;const x=c.getContext("2d",{willReadFrequently:true});
+ let fs=L.sc*80;x.font=`${fs}px ${TEF}`;let m=x.measureText(g.ch);const maxW=L.W*.8;if(m.width>maxW){fs*=maxW/m.width;x.font=`${fs}px ${TEF}`;m=x.measureText(g.ch)}
+ const bx=(L.W-m.width)/2-m.actualBoundingBoxLeft,asc=m.actualBoundingBoxAscent,desc=m.actualBoundingBoxDescent,midY=L.oy+70*L.sc,by=midY+(asc-desc)/2;
+ x.fillStyle="#000";x.fillText(g.ch,bx,by);const d=x.getImageData(0,0,L.W,L.H).data,step=Math.max(4,Math.round(L.sc*3)),pts=[];
+ for(let yy=0;yy<L.H;yy+=step)for(let xx=0;xx<L.W;xx+=step)if(d[(yy*L.W+xx)*4+3]>128)pts.push([xx,yy]);
+ // start dot: left-most filled point (Telugu letters are usually begun from the left); arrow toward the glyph centre
+ let st=pts[0]||[L.W/2,L.H/2];for(const p of pts)if(p[0]<st[0]||(p[0]===st[0]&&p[1]<st[1]))st=p;const cx=pts.reduce((a,p)=>a+p[0],0)/(pts.length||1),cy=pts.reduce((a,p)=>a+p[1],0)/(pts.length||1);
+ Object.assign(g,{mask:true,mw:L.W,mh:L.H,fs,bx,by,pts,st,ang:Math.atan2(cy-st[1],cx-st[0])});return g}
+function fontGuide(x,L){const g=fontSetup(L);x.save();x.font=`${g.fs}px ${TEF}`;
+ if(TR.mode==="trace"){x.fillStyle="#ede7f6";x.fillText(g.ch,g.bx,g.by);x.setLineDash([L.sc*3,L.sc*4]);x.lineWidth=L.sc*1.6;x.strokeStyle="#9575cd";x.strokeText(g.ch,g.bx,g.by);x.setLineDash([]);
+  const[a,b]=g.st,sc=L.sc;x.fillStyle="#43a047";x.beginPath();x.arc(a,b,sc*6,0,7);x.fill();x.fillStyle="#fff";x.font=`bold ${sc*8}px sans-serif`;x.textAlign="center";x.textBaseline="middle";x.fillText(1,a,b+sc*.5);
+  x.translate(a+Math.cos(g.ang)*sc*12,b+Math.sin(g.ang)*sc*12);x.rotate(g.ang);x.fillStyle="#ff7043";x.beginPath();x.moveTo(sc*5,0);x.lineTo(-sc*3,-sc*4);x.lineTo(-sc*3,sc*4);x.fill()}
+ x.restore()}
 function coverage(){const L=layout(),tol=L.sc*13,pts=TR.ink.flat();if(pts.length<4)return 0;let hit=0,n=0;
+ if(TR.g.font){const g=fontSetup(L),t2=L.sc*9;for(const q of g.pts){n++;for(const p of pts)if(Math.abs(p[0]-q[0])<t2&&Math.abs(p[1]-q[1])<t2){hit++;break}}
+  let near=0;for(const p of pts){for(const q of g.pts)if(Math.abs(p[0]-q[0])<tol*1.4&&Math.abs(p[1]-q[1])<tol*1.4){near++;break}}return Math.min(hit/(n||1)*1.15,near/pts.length+.25)}
  for(const s of TR.g.strokes)for(let i=0;i<s.length;i+=1){n++;const gx=L.ox+s[i][0]*L.sc,gy=L.oy+s[i][1]*L.sc;for(const p of pts)if(Math.abs(p[0]-gx)<tol&&Math.abs(p[1]-gy)<tol){hit++;break}}
  // also don't accept scribbles everywhere: ink must be mostly near the guide
  let near=0;for(const p of pts){let ok=false;for(const s of TR.g.strokes){for(const q of s){if(Math.abs(p[0]-(L.ox+q[0]*L.sc))<tol*1.6&&Math.abs(p[1]-(L.oy+q[1]*L.sc))<tol*1.6){ok=true;break}}if(ok)break}if(ok)near++}
  return Math.min(hit/n,near/pts.length+.25)}
 function checkTrace(auto){const ch=curChar();
- if(TR.mode==="free"){const n=TR.ink.flat().length;if(n<15){if(!auto){say("Write it on the lines!");boop()}return}
-  S.free[ch]=1;save();win("You wrote "+(TR.word?TR.word[0]:ch)+" all by yourself!");return}
- const c=coverage();if(c>=.72){S.traced[ch]=(S.traced[ch]||0)+1;
-  if(TR.word){if(TR.wi<TR.word[0].length-1){ding();addStar(0);TR.wi++;setTimeout(()=>{TR.ink=[];setupTrace()},600);return}S.words[TR.word[0]]=1;save();win(TR.word[0]+"! "+cheer());return}
+ if(TR.mode==="free"){const n=TR.ink.flat().length;if(n<15){if(!auto){say(T("Write it on the lines!","గీతల మీద రాయి!"));boop()}return}
+  PR().free[ch]=1;save();win(T("You wrote "+(TR.word?TR.word[0]:ch)+" all by yourself!","నువ్వే రాశావు! "+(TR.word?TR.word[0]:ch)+" బాగుంది!"));return}
+ const c=coverage();if(c>=.72){PR().traced[ch]=(PR().traced[ch]||0)+1;
+  if(TR.word){if(TR.wi<wparts(TR.word).length-1){ding();addStar(0);TR.wi++;setTimeout(()=>{TR.ink=[];setupTrace()},600);return}PR().words[TR.word[0]]=1;save();win(TR.word[0]+"! "+cheer());return}
   save();win(cheer());$("#tfree").classList.remove("hide")}
- else if(!auto){boop();say(c>.4?"Almost! Keep going on the dots.":"Follow the dots, start at the green number one.")}}
+ else if(!auto){boop();say(c>.4?T("Almost! Keep going on the dots.","దాదాపు అయిపోయింది! చుక్కల మీద రాయి."):T("Follow the dots, start at the green number one.","ఆకుపచ్చ చుక్క నుంచి మొదలుపెట్టు."))}}
 function win(msg){confetti();ding([523,659,784,1046]);addStar(1);say(msg);$("#tnext").classList.add("pulse")}
 (function bindTracer(){const cv=$("#tcv");let pid=null;
  const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*DPR,(e.clientY-r.top)*DPR]};
@@ -342,13 +382,14 @@ function win(msg){confetti();ding([523,659,784,1046]);addStar(1);say(msg);$("#tn
 
 // ---------- letter picker ----------
 let pickSet="upper";
-function sets(){return{upper:"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),lower:"abcdefghijklmnopqrstuvwxyz".split(""),nums:[...Array(21).keys()].map(String)}}
+function sets(){if(isTe())return{upper:TE_V,lower:TE_C,nums:TE_N};return{upper:"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),lower:"abcdefghijklmnopqrstuvwxyz".split(""),nums:[...Array(21).keys()].map(String)}}
 function openLetters(set){if(set)pickSet=set;show("letters","write");const L=sets()[pickSet];
  document.querySelectorAll("#ltabs button").forEach(b=>b.classList.toggle("on",b.dataset.set===pickSet));
- $("#lgrid").innerHTML=L.map((c,i)=>`<button class="tile ${S.free[c]?"gold":S.traced[c]?"done":""}" data-i="${i}">${c}${S.free[c]?"<i>🏅</i>":S.traced[c]?"<i>⭐</i>":""}</button>`).join("");
+ $("#ltabs").innerHTML=isTe()?'<button data-set="upper">అ ఆ</button> <button data-set="lower">క ఖ</button> <button data-set="nums">౧ ౨ ౩</button>':'<button data-set="upper">ABC</button> <button data-set="lower">abc</button> <button data-set="nums">123</button>';document.querySelectorAll("#ltabs button").forEach(b=>{b.classList.toggle("on",b.dataset.set===pickSet);b.onclick=()=>openLetters(b.dataset.set)});
+ $("#lgrid").innerHTML=L.map((c,i)=>`<button class="tile ${PR().free[c]?"gold":PR().traced[c]?"done":""}" data-i="${i}">${c}${PR().free[c]?"<i>🏅</i>":PR().traced[c]?"<i>⭐</i>":""}</button>`).join("");
  $("#lgrid").querySelectorAll("button").forEach(b=>b.onclick=()=>openTrace(L,+b.dataset.i))}
-function openWords(){show("words","write");$("#wgrid").innerHTML=WORDLIST.map((w,i)=>`<button class="tile wide ${S.words[w[0]]?"done":""}" data-i="${i}"><b>${w[1]}</b>${w[0]}${S.words[w[0]]?"<i>⭐</i>":""}</button>`).join("");
- $("#wgrid").querySelectorAll("button").forEach(b=>b.onclick=()=>{const w=WORDLIST[+b.dataset.i];openTrace(null,0,w)})}
+function openWords(){show("words","write");$("#wgrid").innerHTML=WL().map((w,i)=>`<button class="tile wide ${PR().words[w[0]]?"done":""}" data-i="${i}"><b>${w[1]}</b>${w[0]}${PR().words[w[0]]?"<i>⭐</i>":""}</button>`).join("");
+ $("#wgrid").querySelectorAll("button").forEach(b=>b.onclick=()=>{const w=WL()[+b.dataset.i];openTrace(null,0,w)})}
 
 // ---------- drawing (layers: bg pattern < paint < line-art < shape preview) ----------
 const D={color:"#e91e63",size:18,tool:"marker",bg:"#ffffff",bgp:"none",undo:[],redo:[],page:null,mirror:false,stamp:"⭐",pattern:"⭐",shape:"circle",hue:0,sfx:S.sfx!==false};
@@ -524,34 +565,47 @@ $("#dsave").onclick=saveGallery;$("#ddl").onclick=downloadPNG;$("#dprint").oncli
 const GM={};const rnd=n=>Math.floor(Math.random()*n),shuf=a=>a.map(v=>[Math.random(),v]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]),pick=(a,n)=>shuf(a).slice(0,n);
 function gameShell(title,emo){show("game","games");$("#gtitle").textContent=emo+" "+title;$("#gbody").innerHTML="";$("#gprompt").textContent=""}
 function good(el,next){ding([660,880,1100]);addStar(1);if(el)el.classList.add("yay");say(cheer());confetti();setTimeout(next,1400)}
-function oops(el){boop();if(el){el.classList.add("wig");setTimeout(()=>el.classList.remove("wig"),500)}say("Try another one!")}
+function oops(el){boop();if(el){el.classList.add("wig");setTimeout(()=>el.classList.remove("wig"),500)}say(T("Try another one!","మళ్ళీ ప్రయత్నించు!"))}
 function choices(items,render,isRight,next){const b=$("#gbody");b.innerHTML=`<div class="choices">${items.map((it,i)=>`<button class="ch" data-i="${i}">${render(it)}</button>`).join("")}</div>`;
  b.querySelectorAll(".ch").forEach(el=>el.onclick=()=>isRight(items[+el.dataset.i])?good(el,next):oops(el))}
-GM.letter=function r(){gameShell("Find the letter","🔤");const L="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),t=L[rnd(26)],opts=shuf([t,...pick(L.filter(c=>c!==t),3)]);
+GM.letter=function r(){if(isTe())return teLetter();gameShell("Find the letter","🔤");const L="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),t=L[rnd(26)],opts=shuf([t,...pick(L.filter(c=>c!==t),3)]);
  $("#gprompt").innerHTML=`<button class="hear" onclick="say('Find the letter ${t}')">🔊</button>`;say("Find the letter "+t);choices(opts,c=>`<span class="bigch">${c}</span>`,c=>c===t,r)};
-GM.count=function r(){gameShell("Count","🔢");const n=1+rnd(10),e=pick(["🍎","🐞","🌟","🐟","🎈","🍪","🐥"],1)[0];const opts=shuf([n,...pick([1,2,3,4,5,6,7,8,9,10].filter(v=>v!==n),2)]);
+GM.count=function r(){if(isTe())return teCount();gameShell("Count","🔢");const n=1+rnd(10),e=pick(["🍎","🐞","🌟","🐟","🎈","🍪","🐥"],1)[0];const opts=shuf([n,...pick([1,2,3,4,5,6,7,8,9,10].filter(v=>v!==n),2)]);
  $("#gprompt").innerHTML=`<div class="countbox">${Array(n).fill(e).map(x=>`<span>${x}</span>`).join("")}</div><button class="hear" onclick="say('How many?')">🔊</button>`;say("How many?");
  $("#gprompt").querySelectorAll(".countbox span").forEach((s,i)=>s.onclick=()=>{s.classList.add("tapped");say(NUMW[i+1])});choices(opts,v=>`<span class="bigch">${v}</span>`,v=>v===n,r)};
 GM.shape=function r(){gameShell("Shapes & colors","🔷");const SH=[["circle","🔴","red circle"],["circle","🔵","blue circle"],["square","🟩","green square"],["square","🟨","yellow square"],["heart","❤️","red heart"],["heart","💜","purple heart"],["star","⭐","yellow star"],["triangle","🔺","red triangle"],["diamond","🔷","blue diamond"],["circle","🟠","orange circle"]];
  const t=SH[rnd(SH.length)],opts=shuf([t,...pick(SH.filter(s=>s!==t),3)]);$("#gprompt").innerHTML=`<button class="hear" onclick="say('Find the ${t[2]}')">🔊</button>`;say("Find the "+t[2]);choices(opts,s=>`<span class="bigch">${s[1]}</span>`,s=>s===t,r)};
-GM.sound=function r(){gameShell("Beginning sound","👂");const keys=Object.keys(WORDS_FOR).filter(k=>k!=="X"),t=keys[rnd(keys.length)],opts=shuf([t,...pick(keys.filter(k=>k!==t),2)]);
+GM.sound=function r(){if(isTe())return teSound();gameShell("Beginning sound","👂");const keys=Object.keys(WORDS_FOR).filter(k=>k!=="X"),t=keys[rnd(keys.length)],opts=shuf([t,...pick(keys.filter(k=>k!==t),2)]);
  const ask=`Which one starts with ${SOUND[t]}? ${t}.`;$("#gprompt").innerHTML=`<span class="bigch">${t}</span><button class="hear" onclick="say('${ask}')">🔊</button>`;say(ask);
  choices(opts,k=>`<span class="bigch">${WORDS_FOR[k][1]}</span><small>${WORDS_FOR[k][0]}</small>`,k=>k===t,r)};
-GM.memory=function r(){gameShell("Memory","🃏");const set=pick([["A","🍎"],["B","⚽"],["C","🐱"],["D","🐶"],["F","🐟"],["S","☀️"],["P","🐷"],["M","🌙"]],4);const cards=shuf(set.flatMap(([l,e])=>[{k:l,f:l},{k:l,f:e}]));
- say("Find the pairs! Match the letter to its picture.");$("#gbody").innerHTML=`<div class="mem">${cards.map((c,i)=>`<button class="card" data-i="${i}"><span>${c.f}</span></button>`).join("")}</div>`;let open=[],done=0,lock=false;
- $("#gbody").querySelectorAll(".card").forEach(el=>el.onclick=()=>{if(lock||el.classList.contains("up"))return;el.classList.add("up");const c=cards[+el.dataset.i];say(c.f.length===1?c.f:WORDS_FOR[c.k][0]);open.push([el,c]);
+GM.memory=function r(){gameShell(T("Memory","జ్ఞాపకం"),"🃏");const set=isTe()?pick(["అ","ఆ","ఇ","ఏ","చ","న","ప","బ","మ","త"].map(l=>[l,TE_INFO[l][1]]),4):pick([["A","🍎"],["B","⚽"],["C","🐱"],["D","🐶"],["F","🐟"],["S","☀️"],["P","🐷"],["M","🌙"]],4);const cards=shuf(set.flatMap(([l,e])=>[{k:l,f:l},{k:l,f:e}]));
+ say(T("Find the pairs! Match the letter to its picture.","జతలు కనుక్కో!"));$("#gbody").innerHTML=`<div class="mem">${cards.map((c,i)=>`<button class="card" data-i="${i}"><span>${c.f}</span></button>`).join("")}</div>`;let open=[],done=0,lock=false;
+ $("#gbody").querySelectorAll(".card").forEach(el=>el.onclick=()=>{if(lock||el.classList.contains("up"))return;el.classList.add("up");const c=cards[+el.dataset.i];say(c.f===c.k?c.f:(isTe()?TE_INFO[c.k][0]:WORDS_FOR[c.k][0]));open.push([el,c]);
   if(open.length===2){lock=true;const[[a,ca],[b,cb]]=open;if(ca.k===cb.k){setTimeout(()=>{a.classList.add("yay");b.classList.add("yay");ding();open=[];lock=false;if(++done===4)good(null,r)},500)}else setTimeout(()=>{a.classList.remove("up");b.classList.remove("up");open=[];lock=false},1100)}})};
-GM.balloon=function r(){gameShell("Pop in order","🎈");const abc=Math.random()<.5,seq=abc?"ABCDE".split(""):["1","2","3","4","5"];let nx=0;say(abc?"Pop the balloons: A, B, C, D, E!":"Pop the balloons: 1, 2, 3, 4, 5!");
+GM.balloon=function r(){gameShell(T("Pop in order","వరుసగా పగలగొట్టు"),"🎈");const abc=Math.random()<.5,seq=isTe()?(abc?["అ","ఆ","ఇ","ఈ","ఉ"]:["౧","౨","౩","౪","౫"]):abc?"ABCDE".split(""):["1","2","3","4","5"];let nx=0;say(isTe()?seq.join(", "):abc?"Pop the balloons: A, B, C, D, E!":"Pop the balloons: 1, 2, 3, 4, 5!");
  const cols=["#ef5350","#ffca28","#66bb6a","#42a5f5","#ab47bc"];$("#gprompt").innerHTML=`<div id="bnext">${seq.map(s=>`<span>${s}</span>`).join("")}</div>`;
  $("#gbody").innerHTML=`<div class="sky">${shuf(seq.map((s,i)=>[s,i])).map(([s,i],k)=>`<button class="bal" data-s="${s}" style="background:${cols[i]};left:${6+k*18}%;animation-delay:${-k*1.3}s">${s}</button>`).join("")}</div>`;
- $("#gbody").querySelectorAll(".bal").forEach(el=>el.onclick=()=>{if(el.dataset.s===seq[nx]){el.classList.add("pop");ding([700+nx*120]);say(seq[nx]);$("#bnext").children[nx].classList.add("done");if(++nx===seq.length)good(null,r)}else{oops(el);say("Find "+seq[nx])}})};
+ $("#gbody").querySelectorAll(".bal").forEach(el=>el.onclick=()=>{if(el.dataset.s===seq[nx]){el.classList.add("pop");ding([700+nx*120]);say(isTe()&&teNum(seq[nx])>=0?TE_NUMW[teNum(seq[nx])]:seq[nx]);$("#bnext").children[nx].classList.add("done");if(++nx===seq.length)good(null,r)}else{oops(el);say(T("Find ","")+seq[nx])}})};
 
+function teLetter(){gameShell("అక్షరం కనుక్కో","🔤");const L=[...TE_V.slice(0,13),...TE_C.filter(c=>TE_INFO[c])],t=L[rnd(L.length)],opts=shuf([t,...pick(L.filter(c=>c!==t),3)]);
+ $("#gprompt").innerHTML=`<button class="hear" id="hearT">🔊</button>`;$("#hearT").onclick=()=>say(t);say(t);choices(opts,c=>`<span class="bigch te">${c}</span>`,c=>c===t,teLetter)}
+function teCount(){gameShell("లెక్కపెట్టు","🔢");const n=1+rnd(10),e=pick(["🍎","🐞","🌟","🐟","🎈","🍪","🐥"],1)[0],opts=shuf([n,...pick([1,2,3,4,5,6,7,8,9,10].filter(v=>v!==n),2)]);
+ $("#gprompt").innerHTML=`<div class="countbox">${Array(n).fill(e).map(x=>`<span>${x}</span>`).join("")}</div><button class="hear" id="hearT">🔊</button>`;$("#hearT").onclick=()=>say("ఎన్ని ఉన్నాయి?");say("ఎన్ని ఉన్నాయి?");
+ $("#gprompt").querySelectorAll(".countbox span").forEach((s,i)=>s.onclick=()=>{s.classList.add("tapped");say(TE_NUMW[i+1])});choices(opts,v=>`<span class="bigch te">${TE_N[v]}</span><small>${TE_NUMW[v]} · ${v}</small>`,v=>v===n,teCount)}
+function teSound(){gameShell("మొదటి అక్షరం","👂");const keys=Object.keys(TE_INFO),t=keys[rnd(keys.length)],opts=shuf([t,...pick(keys.filter(k=>k!==t&&TE_INFO[k][1]!==TE_INFO[t][1]),2)]);
+ const ask=t+" తో మొదలయ్యేది ఏది?";$("#gprompt").innerHTML=`<span class="bigch te">${t}</span><button class="hear" id="hearT">🔊</button>`;$("#hearT").onclick=()=>say(ask);say(ask);
+ choices(opts,k=>`<span class="bigch">${TE_INFO[k][1]}</span><small class="te">${TE_INFO[k][0]}</small>`,k=>k===t,teSound)}
+// ---------- language ----------
+function setLang(l){S.lang=l;save();applyLang();say(l==="te"?"తెలుగు":"English")}
+function applyLang(){$("#langBtn").innerHTML=isTe()?"🇬🇧 English":"తెలుగు";document.documentElement.lang=isTe()?"te":"en";
+ const L=isTe()?["అ ఆ ౧ ౨","అమ్మ ఆవు","బొమ్మలు","ఆటలు"]:["ABC 123","cat dog","Draw","Play"];document.querySelectorAll(".hub button small").forEach((e,i)=>e.textContent=L[i]);
+ const gl=isTe()?["అక్షరం కనుక్కో","లెక్కపెట్టు","ఆకారాలు","మొదటి అక్షరం","జ్ఞాపకం","వరుస బెలూన్లు"]:["Find the letter","Count","Shapes & colors","First sound","Memory","Pop in order"];document.querySelectorAll(".games button small").forEach((e,i)=>e.textContent=gl[i])}
 // ---------- parents ----------
-function openParents(){show("parents","home");const row=(arr)=>arr.map(c=>`<span class="pc ${S.free[c]?"m2":S.traced[c]?"m1":""}">${c}</span>`).join("");const s=sets();
- $("#pbody").innerHTML=`<p>⭐ Stars: <b>${S.stars}</b> · Stickers: ${unlockedStickers().length}/${STICKERS.length} · Words: ${Object.keys(S.words).length}/${WORDLIST.length} · Pictures: ${S.gallery.length}</p>
- <p class="legend"><span class="pc m1">A</span> traced <span class="pc m2">A</span> traced + wrote on own</p><h3>ABC</h3><div class="prow">${row(s.upper)}</div><h3>abc</h3><div class="prow">${row(s.lower)}</div><h3>123</h3><div class="prow">${row(s.nums)}</div>
- <h3>Words</h3><div class="prow">${WORDLIST.map(w=>`<span class="pc wide ${S.words[w[0]]?"m2":""}">${w[0]}</span>`).join("")}</div>
- <p><small>Everything stays on this iPad (no accounts, no internet needed).</small></p><button id="presetBtn" class="mini">🔄 Reset progress</button>`;
+function openParents(){show("parents","home");const row=(arr)=>arr.map(c=>`<span class="pc ${PR().free[c]?"m2":PR().traced[c]?"m1":""}">${c}</span>`).join("");const s=sets();
+ $("#pbody").innerHTML=`<p>⭐ Stars: <b>${S.stars}</b> · Stickers: ${unlockedStickers().length}/${STICKERS.length} · Words: ${Object.keys(PR().words).length}/${WL().length} · Pictures: ${S.gallery.length}</p>
+ <p class="legend"><span class="pc m1">A</span> traced <span class="pc m2">A</span> traced + wrote on own</p><h3>${isTe()?"అచ్చులు (vowels)":"ABC"}</h3><div class="prow">${row(s.upper)}</div><h3>${isTe()?"హల్లులు (consonants)":"abc"}</h3><div class="prow">${row(s.lower)}</div><h3>${isTe()?"అంకెలు (numerals)":"123"}</h3><div class="prow">${row(s.nums)}</div>
+ <p><b>${isTe()?"తెలుగు":"English"}</b> progress shown (switch language on the home screen to see the other).</p><h3>Words</h3><div class="prow">${WL().map(w=>`<span class="pc wide ${PR().words[w[0]]?"m2":""}">${w[0]}</span>`).join("")}</div>
+ <p><small>Everything stays on this iPad (no accounts, no internet needed).</small></p><p><small>🗣️ Telugu voice: ${teVoice?"found ("+teVoice.name+") ✅":"not found on this device, so Telugu prompts show as a speech bubble with a chime. On iPad you can add one: Settings → Accessibility → Spoken Content (Read & Speak) → Voices → Telugu, download a voice, then reopen the app."}</small></p><button id="presetBtn" class="mini">🔄 Reset progress</button>`;
  $("#presetBtn").onclick=()=>{if(confirm("Reset all stars, letters and gallery?")){localStorage.removeItem(KEY);location.reload()}}}
 let holdT=null;function parentHold(on){clearTimeout(holdT);if(on){$("#parentBtn").classList.add("holding");holdT=setTimeout(()=>{$("#parentBtn").classList.remove("holding");openParents()},1500)}else $("#parentBtn").classList.remove("holding")}
 
@@ -562,9 +616,9 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!
 $("#musicBtn").onclick=()=>{Music.set(!S.music);toggles();Music.start()};$("#voiceBtn").onclick=()=>{S.voice=!S.voice;save();toggles();if(S.voice)say("Hi!")};
 document.querySelectorAll("#ltabs button").forEach(b=>b.onclick=()=>openLetters(b.dataset.set));
 $("#thear").onclick=speakChar;$("#tclear").onclick=()=>{TR.ink=[];drawTrace()};$("#tcheck").onclick=()=>checkTrace(false);
-$("#tfree").onclick=()=>{TR.mode="free";TR.ink=[];setupTrace();say("Now write it by yourself on the lines!")};
-$("#tnext").onclick=()=>{if(TR.word){const i=WORDLIST.indexOf(TR.word);openTrace(null,0,WORDLIST[(i+1)%WORDLIST.length]);return}TR.mode="trace";TR.idx=(TR.idx+1)%TR.list.length;setupTrace()};
-$("#tprev").onclick=()=>{if(TR.word){const i=WORDLIST.indexOf(TR.word);openTrace(null,0,WORDLIST[(i-1+WORDLIST.length)%WORDLIST.length]);return}TR.mode="trace";TR.idx=(TR.idx-1+TR.list.length)%TR.list.length;setupTrace()};
+$("#tfree").onclick=()=>{TR.mode="free";TR.ink=[];setupTrace();say(T("Now write it by yourself on the lines!","ఇప్పుడు నువ్వే రాయి!"))};
+$("#tnext").onclick=()=>{if(TR.word){const W=WL(),i=W.indexOf(TR.word);openTrace(null,0,W[(i+1)%W.length]);return}TR.mode="trace";TR.idx=(TR.idx+1)%TR.list.length;setupTrace()};
+$("#tprev").onclick=()=>{if(TR.word){const W=WL(),i=W.indexOf(TR.word);openTrace(null,0,W[(i-1+W.length)%W.length]);return}TR.mode="trace";TR.idx=(TR.idx-1+TR.list.length)%TR.list.length;setupTrace()};
 $("#tback").onclick=()=>TR.word?openWords():openLetters();
 
 $("#dsave").onclick=saveGallery;$("#ddl").onclick=downloadPNG;$("#dprint").onclick=printPic;
@@ -572,8 +626,8 @@ document.querySelectorAll("[data-game]").forEach(b=>b.onclick=()=>GM[b.dataset.g
 $("#parentBtn").addEventListener("pointerdown",()=>parentHold(true));["pointerup","pointerleave","pointercancel"].forEach(e=>$("#parentBtn").addEventListener(e,()=>parentHold(false)));
 ["gesturestart","gesturechange"].forEach(e=>document.addEventListener(e,ev=>ev.preventDefault(),{passive:false}));document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});
 addEventListener("resize",()=>{if($("#trace").classList.contains("on")){sizeCanvas($("#tcv"));drawTrace()}});
-toggles();home();
+$("#langBtn").onclick=()=>setLang(isTe()?"en":"te");applyLang();toggles();home();
 let greeted=false;addEventListener("pointerdown",()=>{if(!greeted&&$("#home").classList.contains("on")){greeted=true;say("Hi! What do you want to do today?")}},{once:true});
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js");
-window.LL={S,TR,D,ST,GM,coverage,checkTrace,openTrace,sets,glyph,WORDLIST,flood,saveGallery,openDraw};
+window.LL={setLang,TE_V,TE_C,TE_N,TE_WORDS,S,TR,D,ST,GM,coverage,checkTrace,openTrace,sets,glyph,WORDLIST,flood,saveGallery,openDraw};
 </script></body></html>
