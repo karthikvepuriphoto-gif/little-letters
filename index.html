@@ -342,7 +342,7 @@ document.addEventListener("visibilitychange",()=>{if(!AC)return;if(document.hidd
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2200)}
 function confetti(){const c=$("#fx"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const P=[...Array(90)].map(()=>({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*16,vy:-Math.random()*16-4,c:`hsl(${Math.random()*360},90%,60%)`,s:6+Math.random()*8,e:Math.random()<.3?"⭐":null}));let f=0;
  (function a(){x.clearRect(0,0,c.width,c.height);for(const p of P){p.vy+=.5;p.x+=p.vx;p.y+=p.vy;if(p.e){x.font="26px sans-serif";x.fillText(p.e,p.x,p.y)}else{x.fillStyle=p.c;x.fillRect(p.x,p.y,p.s,p.s)}}if(++f<90)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})()}
-function addStar(n=1){S.stars+=n;const before=unlockedStickers().length;save();renderStars();if(Math.floor(S.stars/5)!==Math.floor((S.stars-n)/5)&&unlockedStickers().length<=STICKERS.length){const st=unlockedStickers().slice(-1)[0];setTimeout(()=>{toast("🎁 New sticker: "+st);say("You got a new sticker!")},900)}}
+function addStar(n=1){S.stars+=n;const before=unlockedStickers().length;save();renderStars();if(Math.floor(S.stars/5)!==Math.floor((S.stars-n)/5)&&unlockedStickers().length<=STICKERS.length){const st=unlockedStickers().slice(-1)[0];setTimeout(()=>{toast("🎁 New sticker: "+st);$("#trace").classList.contains("on")?taPlay(isTe()?null:"tx_sticker","You got a new sticker!","line"):say("You got a new sticker!")},900)}}
 function renderStars(){document.querySelectorAll(".stars").forEach(e=>e.textContent="⭐ "+S.stars)}
 function cheer(){const w=isTe()?TE_CHEER:["Great job!","Wow!","You did it!","Super!","Amazing!","Yay!"];return w[Math.floor(Math.random()*w.length)]}
 
@@ -356,17 +356,36 @@ function sizeCanvas(cv){const r=cv.getBoundingClientRect();cv.width=Math.round(r
 const TR={chars:[],idx:0,mode:"trace",ink:[],cur:null,g:null,list:[],word:null,wi:0};
 function openTrace(list,i,word){TR.list=list;TR.idx=i;TR.word=word||null;TR.wi=0;TR.mode="trace";show("trace","write");setupTrace()}
 function curChar(){return TR.word?wparts(TR.word)[TR.wi]:TR.list[TR.idx]}
-function setupTrace(){try{hideUndo()}catch(e){}const ch=curChar();TR.g=glyph(ch);TR.ink=[];TR.cur=null;const cv=$("#tcv");sizeCanvas(cv);drawTrace();if(TR.g.font&&document.fonts)document.fonts.load("80px NotoTe",ch).then(()=>{TR.g.mask=false;drawTrace()});
+function setupTrace(){try{hideUndo()}catch(e){}TR.sid=(TR.sid||0)+1;TR.won=false;const ch=curChar();TR.g=glyph(ch);TR.ink=[];TR.cur=null;const cv=$("#tcv");sizeCanvas(cv);drawTrace();if(TR.g.font&&document.fonts)document.fonts.load("80px NotoTe",ch).then(()=>{TR.g.mask=false;drawTrace()});
  const isNum=/^\d+$/.test(ch);let label,pic;
  if(TR.word){label=TR.word[0];pic=TR.word[1];$("#tword").innerHTML=wparts(TR.word).map((c,i)=>`<span class="${i<TR.wi?"done":i===TR.wi?"now":""}">${c}</span>`).join("")}
  else if(isTe()){const n=teNum(ch);if(n>=0){pic="🔵".repeat(n)||"⭕";$("#tword").textContent=TE_NUMW[n]}else{const I=TE_INFO[ch];pic=I?I[1]:"✨";$("#tword").textContent=I?I[0]:ch}}
- else if(isNum){label=ch;pic="🔵".repeat(Math.min(+ch,10))+(+ch>10?" +"+(+ch-10):"");$("#tword").textContent=NUMW[+ch]||ch}
+ else if(isNum){label=ch;pic=+ch===0?"⭕":+ch<=10?NOBJ[+ch].repeat(+ch):"🔵".repeat(10)+" +"+(+ch-10);$("#tword").textContent=NUMW[+ch]||ch}
  else{const W=WORDS_FOR[ch.toUpperCase()];label=ch;pic=W[1];$("#tword").textContent=ch.toUpperCase()===ch?W[0][0].toUpperCase()+W[0].slice(1):W[0]}
- $("#tpic").textContent=pic;$("#tmode").textContent=TR.mode==="trace"?"✏️":"🖍️";$("#tnext").classList.toggle("pulse",false);$("#tfree").classList.toggle("hide",TR.mode!=="trace"||!PR().traced[ch]);
- setTimeout(()=>speakChar(),300)}
-function speakChar(){const ch=curChar();if(TR.word){say(TR.wi===0?T("Let's write ","")+TR.word[0]+". "+ch:ch);return}
- if(isTe()){const n=teNum(ch);if(n>=0)return say(TE_NUMW[n]);const I=TE_INFO[ch];return say(I?ch+". "+I[0]:ch)}
- if(/^\d+$/.test(ch))return say(NUMW[+ch]||ch);const U=ch.toUpperCase(),W=WORDS_FOR[U];say((ch===U?"Big ":"Little ")+U+". "+U+" says "+SOUND[U]+". "+SOUND[U]+" "+W[0]+".")}
+ $("#tpic").textContent=pic;{const tp=$("#tpic"),n=(String(pic).match(/\p{Extended_Pictographic}/gu)||[]).length,r=Math.ceil(n/2);if(isNum&&n>3){tp.style.cssText=`white-space:normal;line-height:1;max-width:46vw;font-size:min(clamp(46px,8vw,80px),${(36/r).toFixed(1)}vw)`}else tp.style.cssText=""}$("#tmode").textContent=TR.mode==="trace"?"✏️":"🖍️";$("#tnext").classList.toggle("pulse",false);$("#tfree").classList.toggle("hide",TR.mode!=="trace"||!PR().traced[ch]);
+ if(!TR.quiet){const sid=TR.sid;setTimeout(()=>{if(sid===TR.sid)speakChar()},250)}TR.quiet=false}
+// ---- tracing audio: one smooth clip at a time, never cut mid-word, never overlapping ----
+const TA={busy:false,pend:null,src:null,last:-1,chimeT:0,n:{intro:0,praise:0,chime:0}};
+function taPlay(name,text,kind){if(!S.voice)return;const job={name,text,kind,scr:TR.sid};if(TA.busy){TA.pend=job;return}taRun(job)}
+async function taRun(job){if(job.scr!==TR.sid&&job.kind==="intro")return;TA.busy=true;TA.n[job.kind]=(TA.n[job.kind]||0)+1;window.__taLog&&__taLog.push(job);
+ const done=()=>{if(!TA.busy)return;TA.busy=false;TA.src=null;const p=TA.pend;TA.pend=null;if(p&&$("#trace").classList.contains("on"))setTimeout(()=>taRun(p),120)};
+ const a=ac();
+ if(job.name&&a){try{if(a.state==="suspended")await a.resume();const b=await abuf(job.name);const sN=a.createBufferSource(),g=a.createGain();g.gain.value=1;sN.buffer=b;sN.connect(g);g.connect(a.destination);sN.onended=done;TA.src=sN;sN.start();setTimeout(done,b.duration*1000+600);return}catch(e){}}
+ // speech fallback (Telugu, or clip unavailable): never cancel; wait for it to finish
+ const t=job.text;if(!t){done();return}
+ if(isTe()&&/[\u0C00-\u0C7F]/.test(t)&&(!window.speechSynthesis||!teVoice)){bubble(t);setTimeout(done,1800);return}
+ if(!window.speechSynthesis){done();return}
+ try{const u=new SpeechSynthesisUtterance(t);if(isTe()&&teVoice){u.voice=teVoice;u.lang=teVoice.lang}else{if(voice)u.voice=voice;u.lang="en-US"}u.rate=.85;u.pitch=1.25;u.onend=done;u.onerror=done;
+  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();speechSynthesis.speak(u);setTimeout(done,Math.min(9000,1500+t.length*90))}catch(e){done()}}
+function softChime(){const now=performance.now();if(TA.busy||now-TA.chimeT<700)return;TA.chimeT=now;const a=ac();if(!a||(D&&D.sfx===false))return;TA.n.chime++;const t=a.currentTime,o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=1046;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.035,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.35);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.4)}
+const NOBJ=["⭕","☀️","👟","🎈","🐞","⭐","🦆","🍎","🐟","🌸","🍓"];
+function introInfo(){const ch=curChar();
+ if(TR.word){if(isTe())return[null,T("","")+TR.word[0]];return["tw_"+TR.word[0].toLowerCase().replace(/[^a-z]/g,""),"Let's write "+TR.word[0]+"."]}
+ if(isTe()){const n=teNum(ch);if(n>=0)return[null,TE_NUMW[n]];const I=TE_INFO[ch];return[null,I?ch+". "+I[0]:ch]}
+ if(/^\d+$/.test(ch))return["tn_"+(+ch),NUMW[+ch]||ch];const U=ch.toUpperCase();return[(ch===U?"tu_":"tl_")+U.toLowerCase(),(ch===U?"Big ":"Little ")+U+". "+U+" is for "+WORDS_FOR[U][0]+"."]}
+function speakChar(){const[n,t]=introInfo();taPlay(n,t,"intro")}
+function tPraise(){let i;do{i=Math.floor(Math.random()*6)}while(i===TA.last&&Math.random()<.95);TA.last=i;if(isTe())taPlay(null,cheer(),"praise");else taPlay("tp_"+i,cheer(),"praise")}
+function tLine(k,en,te){if(isTe())taPlay(null,te,"line");else taPlay("tx_"+k,en,"line")}
 function layout(){const cv=$("#tcv"),W=cv.width,H=cv.height,g=TR.g;const sc=Math.min(W/(g.w+20),H/125)*.92;const ox=(W-g.w*sc)/2,oy=(H-120*sc)/2+4*DPR;return{sc,ox,oy,W,H}}
 function drawTrace(){const cv=$("#tcv"),x=cv.getContext("2d"),L=layout(),{sc,ox,oy,W,H}=L,P=([a,b])=>[ox+a*sc,oy+b*sc];
  x.clearRect(0,0,W,H);
@@ -402,20 +421,20 @@ function coverage(){const L=layout(),tol=L.sc*13,pts=TR.ink.flat();if(pts.length
  // also don't accept scribbles everywhere: ink must be mostly near the guide
  let near=0;for(const p of pts){let ok=false;for(const s of TR.g.strokes){for(const q of s){if(Math.abs(p[0]-(L.ox+q[0]*L.sc))<tol*1.6&&Math.abs(p[1]-(L.oy+q[1]*L.sc))<tol*1.6){ok=true;break}}if(ok)break}if(ok)near++}
  return Math.min(hit/n,near/pts.length+.25)}
-function checkTrace(auto){const ch=curChar();
- if(TR.mode==="free"){const n=TR.ink.flat().length;if(n<15){if(!auto){say(T("Write it on the lines!","గీతల మీద రాయి!"));boop()}return}
-  PR().free[ch]=1;save();win(T("You wrote "+(TR.word?TR.word[0]:ch)+" all by yourself!","నువ్వే రాశావు! "+(TR.word?TR.word[0]:ch)+" బాగుంది!"));return}
+function checkTrace(auto){const ch=curChar();if(TR.won||(auto&&TR.cur))return;
+ if(TR.mode==="free"){const n=TR.ink.flat().length;if(auto&&n<40)return;if(n<15){tLine("lines","Write it on the lines!","గీతల మీద రాయి!");boop();return}
+  PR().free[ch]=1;save();win();return}
  const c=coverage();if(c>=.72){PR().traced[ch]=(PR().traced[ch]||0)+1;
-  if(TR.word){if(TR.wi<wparts(TR.word).length-1){ding();addStar(0);TR.wi++;setTimeout(()=>{TR.ink=[];setupTrace()},600);return}PR().words[TR.word[0]]=1;save();win(TR.word[0]+"! "+cheer());return}
-  save();win(cheer());$("#tfree").classList.remove("hide")}
- else if(!auto){boop();say(c>.4?T("Almost! Keep going on the dots.","దాదాపు అయిపోయింది! చుక్కల మీద రాయి."):T("Follow the dots, start at the green number one.","ఆకుపచ్చ చుక్క నుంచి మొదలుపెట్టు."))}}
-function win(msg){confetti();ding([523,659,784,1046]);addStar(1);say(msg);$("#tnext").classList.add("pulse")}
+  if(TR.word){if(TR.wi<wparts(TR.word).length-1){TR.won=true;TA.chimeT=0;softChime();addStar(0);TR.wi++;setTimeout(()=>{TR.ink=[];TR.quiet=true;setupTrace()},600);return}PR().words[TR.word[0]]=1;save();win();return}
+  save();win();$("#tfree").classList.remove("hide")}
+ else if(!auto){boop();c>.4?tLine("almost","Almost! Keep going on the dots.","దాదాపు అయిపోయింది! చుక్కల మీద రాయి."):tLine("follow","Follow the dots. Start at the green number one.","ఆకుపచ్చ చుక్క నుంచి మొదలుపెట్టు.")}}
+function win(){TR.won=true;confetti();ding([523,659,784,1046],.07);addStar(1);setTimeout(tPraise,450);$("#tnext").classList.add("pulse")}
 (function bindTracer(){const cv=$("#tcv");let pid=null;
  const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*DPR,(e.clientY-r.top)*DPR]};
  cv.addEventListener("pointerdown",e=>{if(pid!==null&&e.pointerType==="touch"&&e.width>40)return; // ignore palm
-  if(pid!==null)return;pid=e.pointerId;cv.setPointerCapture(pid);TR.cur=[pos(e)];TR.ink.push(TR.cur);drawTrace()});
+  if(pid!==null)return;pid=e.pointerId;clearTimeout(checkTrace.t);cv.setPointerCapture(pid);TR.cur=[pos(e)];TR.ink.push(TR.cur);drawTrace()});
  cv.addEventListener("pointermove",e=>{if(e.pointerId!==pid)return;const ev=e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const c of(ev.length?ev:[e]))TR.cur.push(pos(c));drawTrace()});
- const up=e=>{if(e.pointerId!==pid)return;pid=null;TR.cur=null;drawTrace();clearTimeout(checkTrace.t);checkTrace.t=setTimeout(()=>checkTrace(true),700)};
+ const up=e=>{if(e.pointerId!==pid)return;pid=null;TR.cur=null;drawTrace();if(TR.won)return;softChime();clearTimeout(checkTrace.t);checkTrace.t=setTimeout(()=>checkTrace(true),TR.mode==="free"?2500:700)};
  cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up)})();
 
 // ---------- letter picker ----------
@@ -662,8 +681,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!
  ({home,read:()=>openRead(),letters:()=>openLetters(),words:openWords,draw:openDraw,games:()=>show("games","games"),gallery:openGallery})[g]?.()});
 $("#musicBtn").onclick=()=>{Music.set(!S.music);toggles();Music.start()};$("#voiceBtn").onclick=()=>{S.voice=!S.voice;save();toggles();if(S.voice)say("Hi!")};
 document.querySelectorAll("#ltabs button").forEach(b=>b.onclick=()=>openLetters(b.dataset.set));
-$("#thear").onclick=speakChar;$("#tclear").onclick=()=>askClear("trace");$("#tcheck").onclick=()=>checkTrace(false);
-$("#tfree").onclick=()=>{TR.mode="free";TR.ink=[];setupTrace();say(T("Now write it by yourself on the lines!","ఇప్పుడు నువ్వే రాయి!"))};
+$("#thear").onclick=()=>{if(!TA.busy)speakChar()};$("#tclear").onclick=()=>askClear("trace");$("#tcheck").onclick=()=>checkTrace(false);
+$("#tfree").onclick=()=>{TR.mode="free";TR.ink=[];TR.quiet=true;setupTrace();tLine("free","Now write it by yourself on the lines!","ఇప్పుడు నువ్వే రాయి!")};
 $("#tnext").onclick=()=>{if(TR.word){const W=WL(),i=W.indexOf(TR.word);openTrace(null,0,W[(i+1)%W.length]);return}TR.mode="trace";TR.idx=(TR.idx+1)%TR.list.length;setupTrace()};
 $("#tprev").onclick=()=>{if(TR.word){const W=WL(),i=W.indexOf(TR.word);openTrace(null,0,W[(i-1+W.length)%W.length]);return}TR.mode="trace";TR.idx=(TR.idx-1+TR.list.length)%TR.list.length;setupTrace()};
 $("#tback").onclick=()=>TR.word?openWords():openLetters();
@@ -676,7 +695,7 @@ addEventListener("resize",()=>{if($("#trace").classList.contains("on")){sizeCanv
 $("#langBtn").onclick=()=>setLang(isTe()?"en":"te");applyLang();toggles();home();
 let greeted=false;addEventListener("pointerdown",()=>{if(!greeted&&$("#home").classList.contains("on")){greeted=true;say("Hi! What do you want to do today?")}},{once:true});
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js");
-window.LL={setLang,TE_V,TE_C,TE_N,TE_WORDS,S,TR,D,ST,GM,coverage,checkTrace,openTrace,sets,glyph,WORDLIST,flood,saveGallery,openDraw};
+window.LL={TA,setLang,TE_V,TE_C,TE_N,TE_WORDS,S,TR,D,ST,GM,coverage,checkTrace,openTrace,sets,glyph,WORDLIST,flood,saveGallery,openDraw};
 </script><script>
 const RD={"letters":[{"l":"s","kw":"snake","e":"🐍","tip":"Teeth together. Hiss like a snake: sss!","c":1},{"l":"a","kw":"apple","e":"🍎","tip":"Open your mouth wide and say a, like in apple.","c":0},{"l":"t","kw":"tiger","e":"🐯","tip":"Tap your tongue behind your top teeth. Quick: t!","c":0},{"l":"p","kw":"pig","e":"🐷","tip":"Press your lips and pop! Feel a puff of air.","c":0},{"l":"i","kw":"insect","e":"🐛","tip":"Small smile. Say i, like in insect.","c":0},{"l":"n","kw":"nest","e":"🪺","tip":"Tongue up behind your teeth. Hum through your nose: nnn.","c":1},{"l":"m","kw":"moon","e":"🌙","tip":"Lips together. Hum: mmm.","c":1},{"l":"d","kw":"dog","e":"🐶","tip":"Tap your tongue up high with your voice on: d!","c":0},{"l":"g","kw":"goat","e":"🐐","tip":"Back of your tongue goes up. Voice on: g!","c":0},{"l":"o","kw":"octopus","e":"🐙","tip":"Open wide and say o, like a doctor checks your throat.","c":0},{"l":"c","kw":"cat","e":"🐱","tip":"Back of your tongue, a tiny cough: c!","c":0},{"l":"k","kw":"kite","e":"🪁","tip":"Same sound as c: k!","c":0},{"l":"e","kw":"egg","e":"🥚","tip":"Little smile, jaw a bit open: e, like in egg.","c":0},{"l":"u","kw":"umbrella","e":"☂️","tip":"Relax your mouth: u, like in umbrella.","c":0},{"l":"r","kw":"rabbit","e":"🐰","tip":"Round your lips a little and growl: rrr.","c":1},{"l":"h","kw":"hat","e":"🎩","tip":"Open mouth and huff, like fogging a window: h.","c":0},{"l":"b","kw":"ball","e":"⚽","tip":"Lips together, pop with your voice on: b!","c":0},{"l":"f","kw":"fish","e":"🐟","tip":"Top teeth on your bottom lip. Blow: fff.","c":1},{"l":"l","kw":"lion","e":"🦁","tip":"Tongue tip up behind your teeth: lll.","c":1},{"l":"j","kw":"jellyfish","e":"🪼","tip":"Lips forward, quick: j!","c":0},{"l":"v","kw":"van","e":"🚐","tip":"Top teeth on your bottom lip. Buzz: vvv.","c":1},{"l":"w","kw":"web","e":"🕸️","tip":"Round your lips like a little kiss: w.","c":0},{"l":"x","kw":"fox","e":"🦊","tip":"x says ks, like at the end of fox.","c":0},{"l":"y","kw":"yo-yo","e":"🪀","tip":"Smile, tongue high: y, like in yo-yo.","c":0},{"l":"z","kw":"zebra","e":"🦓","tip":"Teeth together. Buzz like a bee: zzz.","c":1},{"l":"q","kw":"queen","e":"👑","tip":"q and u go together: kw, like in queen.","c":0}],"groups":[["s","a","t","p"],["i","n","m","d"],["g","o","c","k"],["e","u","r","h"],["b","f","l","j"],["v","w","x","y","z","q"]],"cvc":[["sat","🪑"],["tap","🚰"],["map","🗺️"],["nap","😴"],["pin","📌"],["tin","🥫"],["sit","🧘"],["pig","🐷"],["dad","👨"],["dig","⛏️"],["dog","🐶"],["cat","🐱"],["hot","🔥"],["pot","🍲"],["kid","🧒"],["hen","🐔"],["ten","🔟"],["red","🔴"],["sun","☀️"],["cup","🥤"],["bus","🚌"],["bed","🛏️"],["fox","🦊"],["box","📦"],["log","🪵"],["jam","🍓"],["van","🚐"],["web","🕸️"],["yes","👍"],["zip","🤐"]],"sight":["the","a","I","is","see","and","to","my","we","can","like","go","you","he","she","it","in","up","look","said"],"stories":[{"id":"sam","t":"Sam the Cat","e":"🐱","pages":["Sam is a cat.","Sam sat on a mat.","Sam can see a rat.","The rat ran!","Sam naps on the mat."],"pics":["🐱","🧶","🐀","💨","😴"],"q":{"q":"What did Sam see?","opts":[["rat","🐀"],["dog","🐶"],["fish","🐟"]],"a":0}},{"id":"pig","t":"Pig in the Mud","e":"🐷","pages":["A pig is in the mud.","The pig can dig.","The pig is hot.","Hop in the tub, pig!","The pig is not hot."],"pics":["🐷","⛏️","🥵","🛁","😊"],"q":{"q":"What can the pig do?","opts":[["sing","🎤"],["dig","⛏️"],["fly","🪁"]],"a":1}},{"id":"bus","t":"The Red Bus","e":"🚌","pages":["I see a red bus.","Mom and Dad get on the bus.","I can sit up on top.","The bus can go!","Look! We can see the sun."],"pics":["🚌","👨‍👩‍👧","🪑","💨","☀️"],"q":{"q":"What color is the bus?","opts":[["blue","🔵"],["green","🟢"],["red","🔴"]],"a":2}},{"id":"fox","t":"Fox and Hen","e":"🦊","pages":["A fox is in a box.","A hen is in a pen.","The fox can hop.","The hen can run!","The fox and hen sit in the sun."],"pics":["📦","🐔","🦘","🏃","☀️"],"q":{"q":"What can the hen do?","opts":[["run","🏃"],["swim","🏊"],["read","📖"]],"a":0}}]};
 // ---------- Learn to Read (original content; sounds are General American English) ----------
