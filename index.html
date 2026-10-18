@@ -103,6 +103,32 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 #clrPop .yn{display:flex;gap:24px;justify-content:center}#clrPop .yn button{width:clamp(110px,24vw,150px);height:clamp(110px,24vw,150px);font-size:clamp(56px,12vw,76px);border-radius:32px}
 #clrYes{background:#b9f6ca!important}#clrNo{background:#ffcdd2!important}
 #clrUndo{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:65;display:none;font-size:30px;font-weight:800;padding:0 26px;min-height:76px;background:#fff3c4;border:4px solid #ffb300}#clrUndo.show{display:block}
+#read .bar{padding:6px 0}.rtitle{font-size:clamp(22px,4vw,32px);font-weight:800;color:#ff4fa3}
+#rbody{flex:1;display:flex;flex-direction:column}
+.rmap{display:flex;flex-direction:column;gap:6px;padding-bottom:20px}.rlab{font-size:clamp(18px,3vw,24px);font-weight:800;margin:8px 4px 0;color:#7e57c2}
+.rpath{display:flex;flex-wrap:wrap;gap:12px}.rstep{flex:1 1 140px;min-height:96px;border-radius:28px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:clamp(26px,5vw,38px);border:4px dashed #d1c4e9}
+.rstep small{font-size:clamp(14px,2.4vw,18px);font-weight:700}.rstep.big{flex-basis:100%}.rstep.done{background:#dcf7d4;border:4px solid #66bb6a}
+.rhint{font-size:clamp(20px,3.4vw,28px);text-align:center;margin:6px 0}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;padding:6px 0 16px}.rgrid.words{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.rlet{min-height:130px;font-size:clamp(60px,12vw,92px);font-weight:800;border-radius:30px;background:#fff3c4;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.rlet small{font-size:34px}.rlet.word{font-size:clamp(34px,7vw,48px);min-height:100px;background:#d6f5ff}.rlet.game{background:#ffd6e8}.rlet.done{background:#dcf7d4}.rlet.nope{background:#ffcdd2;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.rcard{background:#fff;border-radius:36px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:16px}
+.rbigl{font-size:clamp(90px,22vw,170px);font-weight:800;line-height:1;color:#4a3b6b;letter-spacing:8px}.rbigw{font-size:clamp(80px,18vw,150px);font-weight:800;line-height:1.1}
+.rpic{font-size:clamp(70px,16vw,120px);line-height:1;background:none;box-shadow:none;min-height:0}.rpic.hidden{filter:none;opacity:.9}
+.rrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}.rgo{min-height:84px;font-size:clamp(26px,5vw,36px);padding:0 24px;background:#ffd6e8;font-weight:800}.rgo.alt{background:#d6f5ff}
+.rtip{font-size:clamp(19px,3.2vw,26px);text-align:center;margin:2px 8px;max-width:700px}.rtip.small{font-size:clamp(15px,2.6vw,20px);opacity:.85}
+.rnav{display:flex;gap:16px;justify-content:center;margin-top:4px}.rnav button{min-width:96px;min-height:80px;font-size:38px}.rnav button:disabled{opacity:.3}
+.bword{display:flex;gap:clamp(14px,4vw,40px);font-size:clamp(90px,22vw,170px);font-weight:800;line-height:1}.bl{color:#b0a6c7;transition:.15s}.bl.on{color:#ff4fa3;transform:scale(1.08)}
+.slider{position:relative;width:min(92%,640px);height:84px;background:#f3e5f5;border-radius:42px;touch-action:none;margin:4px 0}.dots{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-around;padding:0 6% 0 2%;pointer-events:none}
+.dots i{width:22px;height:22px;border-radius:50%;background:#ce93d8}.dots i.end{width:auto;height:auto;background:none;font-style:normal;font-size:34px;color:#ab47bc}
+.knob{position:absolute;top:6px;left:0;width:72px;height:72px;margin-left:-6px;border-radius:50%;background:#ff4fa3;display:flex;align-items:center;justify-content:center;font-size:38px;transition:left .25s;pointer-events:none;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.rmic{min-height:96px;font-size:clamp(28px,5vw,38px);padding:0 28px;background:#b9f6ca;font-weight:800}.rmic.listening{background:#fff59d;animation:pulse 1s infinite}@keyframes pulse{50%{transform:scale(1.05)}}
+.rnote{display:block;text-align:center;font-size:16px;opacity:.7}.rq{font-size:clamp(22px,4vw,32px);font-weight:800;text-align:center}.rwin{font-size:clamp(30px,6vw,44px);font-weight:800;color:#2e7d32}.rtry{font-size:28px;font-weight:800;color:#f57f17}
+.book .ptext{font-size:clamp(40px,8.5vw,72px);font-weight:800;line-height:1.35;text-align:center;max-width:900px}.pw{padding:0 6px;border-radius:14px;cursor:pointer}.pw.on{background:#fff59d;color:#d81b60}.pgno{align-self:flex-end;font-size:18px;opacity:.6}
+.c5{background:#e8dcff}@media (orientation:portrait),(max-width:600px){.hub .c5{grid-column:1/-1}}
+@media (orientation:landscape) and (max-height:900px){.hub{grid-template-columns:repeat(5,1fr)!important}.rlet{min-height:100px}.rbigl,.bword{font-size:clamp(70px,16vh,130px)}.rpic{font-size:clamp(56px,13vh,100px)}}
+@media (orientation:landscape) and (max-height:500px){.rgo,.rmic{min-height:64px}.rnav button{min-height:62px}.slider{height:70px}.knob{width:60px;height:60px}.book .ptext{font-size:clamp(32px,9vh,56px)}}
 </style></head><body>
 <canvas id="fx"></canvas><div id="toast"></div><div id="bubble"></div>
 
@@ -113,6 +139,7 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
   <button class="c2" data-go="words" aria-label="Words">🐱<small>cat dog</small></button>
   <button class="c3" data-go="draw" aria-label="Draw">🎨<small>Draw</small></button>
   <button class="c4" data-go="games" aria-label="Games">🎲<small>Play</small></button>
+  <button class="c5" data-go="read" aria-label="Learn to read">📖<small>Read</small></button>
  </div>
  <div class="bar"><button data-go="gallery" class="mini">🖼️ Gallery</button><span class="sp"></span><button id="parentBtn" title="Hold for grown-ups">👪 Hold for grown-ups</button></div>
 </section>
@@ -175,6 +202,8 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
  <div class="bar"><button data-go="games">⬅️</button><span id="gtitle"></span><span class="sp"></span><span class="stars"></span></div>
  <div id="gprompt"></div><div id="gbody"></div>
 </section>
+
+<section class="scr" id="read"><div id="rbody"></div></section>
 
 <section class="scr" id="parents">
  <div class="bar"><button data-go="home">🏠</button><h2 style="margin:0">👪 For grown-ups</h2></div>
@@ -285,9 +314,9 @@ const teNum=s=>TE_N.indexOf(s);
 const unlockedStickers=()=>STICKERS.slice(0,4+Math.floor(S.stars/5));
 
 // ---------- voice + sound ----------
-let voice=null,teVoice=null;function pickVoice(){const all=speechSynthesis.getVoices(),vs=all.filter(v=>/^en/i.test(v.lang));voice=vs.find(v=>/Samantha|Karen|Moira|Tessa|Google US English|Female/i.test(v.name))||vs[0]||null;teVoice=all.find(v=>/^te/i.test(v.lang))||null}
+let voice=null,teVoice=null;function pickVoice(){const all=speechSynthesis.getVoices(),us=all.filter(v=>/^en[-_]US/i.test(v.lang)),vs=us.length?us:all.filter(v=>/^en/i.test(v.lang)&&!/GB|IN|AU|IE|ZA|NZ/i.test(v.lang));voice=us.find(v=>/Samantha/i.test(v.name))||us.find(v=>/Google US English/i.test(v.name))||us.find(v=>/Ava|Allison|Susan|Zoe|Nicky|Female/i.test(v.name))||vs[0]||null;teVoice=all.find(v=>/^te/i.test(v.lang))||null}
 if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(t){if(!S.voice)return;if(isTe()&&/[\u0C00-\u0C7F]/.test(t)&&(!window.speechSynthesis||!teVoice)){bubble(t);return}if(!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(isTe()&&teVoice){u.voice=teVoice;u.lang=teVoice.lang}else if(voice)u.voice=voice;u.rate=.85;u.pitch=1.25;speechSynthesis.speak(u)}catch(e){}}
+function say(t){if(!S.voice)return;if(isTe()&&/[\u0C00-\u0C7F]/.test(t)&&(!window.speechSynthesis||!teVoice)){bubble(t);return}if(!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);if(isTe()&&teVoice){u.voice=teVoice;u.lang=teVoice.lang}else{if(voice)u.voice=voice;u.lang="en-US"}u.rate=.85;u.pitch=1.25;speechSynthesis.speak(u)}catch(e){}}
 let AC=null;function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}return AC}
 function ding(notes=[660,880,1100],gap=.09){const a=ac();if(!a)return;const t=a.currentTime;notes.forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.12,t+i*gap);g.gain.exponentialRampToValueAtTime(.001,t+i*gap+.35);o.connect(g);g.connect(a.destination);o.start(t+i*gap);o.stop(t+i*gap+.4)})}
 const boop=()=>ding([300,250],.1);
@@ -616,21 +645,21 @@ function teSound(){gameShell("మొదటి అక్షరం","👂");const 
 // ---------- language ----------
 function setLang(l){S.lang=l;save();applyLang();say(l==="te"?"తెలుగు":"English")}
 function applyLang(){$("#langBtn").innerHTML=isTe()?"🇬🇧 English":"తెలుగు";document.documentElement.lang=isTe()?"te":"en";
- const L=isTe()?["అ ఆ ౧ ౨","అమ్మ ఆవు","బొమ్మలు","ఆటలు"]:["ABC 123","cat dog","Draw","Play"];document.querySelectorAll(".hub button small").forEach((e,i)=>e.textContent=L[i]);
+ const L=isTe()?["అ ఆ ౧ ౨","అమ్మ ఆవు","బొమ్మలు","ఆటలు","చదువు"]:["ABC 123","cat dog","Draw","Play","Read"];document.querySelectorAll(".hub button small").forEach((e,i)=>e.textContent=L[i]);
  const gl=isTe()?["అక్షరం కనుక్కో","లెక్కపెట్టు","ఆకారాలు","మొదటి అక్షరం","జ్ఞాపకం","వరుస బెలూన్లు"]:["Find the letter","Count","Shapes & colors","First sound","Memory","Pop in order"];document.querySelectorAll(".games button small").forEach((e,i)=>e.textContent=gl[i])}
 // ---------- parents ----------
 function openParents(){show("parents","home");const row=(arr)=>arr.map(c=>`<span class="pc ${PR().free[c]?"m2":PR().traced[c]?"m1":""}">${c}</span>`).join("");const s=sets();
  $("#pbody").innerHTML=`<p>⭐ Stars: <b>${S.stars}</b> · Stickers: ${unlockedStickers().length}/${STICKERS.length} · Words: ${Object.keys(PR().words).length}/${WL().length} · Pictures: ${S.gallery.length}</p>
  <p class="legend"><span class="pc m1">A</span> traced <span class="pc m2">A</span> traced + wrote on own</p><h3>${isTe()?"అచ్చులు (vowels)":"ABC"}</h3><div class="prow">${row(s.upper)}</div><h3>${isTe()?"హల్లులు (consonants)":"abc"}</h3><div class="prow">${row(s.lower)}</div><h3>${isTe()?"అంకెలు (numerals)":"123"}</h3><div class="prow">${row(s.nums)}</div>
  <p><b>${isTe()?"తెలుగు":"English"}</b> progress shown (switch language on the home screen to see the other).</p><h3>Words</h3><div class="prow">${WL().map(w=>`<span class="pc wide ${PR().words[w[0]]?"m2":""}">${w[0]}</span>`).join("")}</div>
- <p><small>Everything stays on this iPad (no accounts, no internet needed).</small></p><p><small>🗣️ Telugu voice: ${teVoice?"found ("+teVoice.name+") ✅":"not found on this device, so Telugu prompts show as a speech bubble with a chime. On iPad you can add one: Settings → Accessibility → Spoken Content (Read & Speak) → Voices → Telugu, download a voice, then reopen the app."}</small></p><button id="presetBtn" class="mini">🔄 Reset progress</button>`;
+ <p><small>Everything stays on this iPad (no accounts, no internet needed).</small></p><p><small>🗣️ Telugu voice: ${teVoice?"found ("+teVoice.name+") ✅":"not found on this device, so Telugu prompts show as a speech bubble with a chime. On iPad you can add one: Settings → Accessibility → Spoken Content (Read & Speak) → Voices → Telugu, download a voice, then reopen the app."}</small></p><h3>📖 Learn to Read</h3><p>Letter sounds heard: ${Object.keys(RP.heard).length}/26 · Words sounded out: ${Object.keys(RP.blend).length}/${RD.cvc.length} · Sight words: ${Object.keys(RP.sight).length}/${RD.sight.length} · Books: ${Object.keys(RP.story).length}/${RD.stories.length}</p><p><label style="font-size:22px"><input type="checkbox" id="pMic" ${RP.mic?"checked":""} style="width:28px;height:28px;vertical-align:middle"> 🎤 Let your child say words into the microphone (“Say it” stars)</label><br><small>Off by default. Uses the browser\'s own speech recognition (US English). On iPhone/iPad (Safari) and in Chrome this may send the audio to Apple or Google servers to recognize it; Little Letters itself never records, saves or uploads anything. When off (or unsupported), she gets a friendly “Did you say it? 👍” check instead.${SR?"":" (Speech recognition is not available in this browser.)"}</small></p><button id="presetBtn" class="mini">🔄 Reset progress</button>`;$("#pMic").onchange=e=>{RP.mic=e.target.checked;rsave()};
  $("#presetBtn").onclick=()=>{if(confirm("Reset all stars, letters and gallery?")){localStorage.removeItem(KEY);location.reload()}}}
 let holdT=null;function parentHold(on){clearTimeout(holdT);if(on){$("#parentBtn").classList.add("holding");holdT=setTimeout(()=>{$("#parentBtn").classList.remove("holding");openParents()},1500)}else $("#parentBtn").classList.remove("holding")}
 
 // ---------- wire up ----------
 function toggles(){$("#musicBtn").textContent=S.music?"🎵":"🔇";$("#voiceBtn").textContent=S.voice?"🗣️":"🤐";$("#musicBtn").classList.toggle("off",!S.music);$("#voiceBtn").classList.toggle("off",!S.voice)}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!b)return;const g=b.dataset.go;
- ({home,letters:()=>openLetters(),words:openWords,draw:openDraw,games:()=>show("games","games"),gallery:openGallery})[g]?.()});
+ ({home,read:()=>openRead(),letters:()=>openLetters(),words:openWords,draw:openDraw,games:()=>show("games","games"),gallery:openGallery})[g]?.()});
 $("#musicBtn").onclick=()=>{Music.set(!S.music);toggles();Music.start()};$("#voiceBtn").onclick=()=>{S.voice=!S.voice;save();toggles();if(S.voice)say("Hi!")};
 document.querySelectorAll("#ltabs button").forEach(b=>b.onclick=()=>openLetters(b.dataset.set));
 $("#thear").onclick=speakChar;$("#tclear").onclick=()=>askClear("trace");$("#tcheck").onclick=()=>checkTrace(false);
@@ -648,4 +677,88 @@ $("#langBtn").onclick=()=>setLang(isTe()?"en":"te");applyLang();toggles();home()
 let greeted=false;addEventListener("pointerdown",()=>{if(!greeted&&$("#home").classList.contains("on")){greeted=true;say("Hi! What do you want to do today?")}},{once:true});
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js");
 window.LL={setLang,TE_V,TE_C,TE_N,TE_WORDS,S,TR,D,ST,GM,coverage,checkTrace,openTrace,sets,glyph,WORDLIST,flood,saveGallery,openDraw};
-</script></body></html>
+</script><script>
+const RD={"letters":[{"l":"s","kw":"snake","e":"🐍","tip":"Teeth together. Hiss like a snake: sss!","c":1},{"l":"a","kw":"apple","e":"🍎","tip":"Open your mouth wide and say a, like in apple.","c":0},{"l":"t","kw":"tiger","e":"🐯","tip":"Tap your tongue behind your top teeth. Quick: t!","c":0},{"l":"p","kw":"pig","e":"🐷","tip":"Press your lips and pop! Feel a puff of air.","c":0},{"l":"i","kw":"insect","e":"🐛","tip":"Small smile. Say i, like in insect.","c":0},{"l":"n","kw":"nest","e":"🪺","tip":"Tongue up behind your teeth. Hum through your nose: nnn.","c":1},{"l":"m","kw":"moon","e":"🌙","tip":"Lips together. Hum: mmm.","c":1},{"l":"d","kw":"dog","e":"🐶","tip":"Tap your tongue up high with your voice on: d!","c":0},{"l":"g","kw":"goat","e":"🐐","tip":"Back of your tongue goes up. Voice on: g!","c":0},{"l":"o","kw":"octopus","e":"🐙","tip":"Open wide and say o, like a doctor checks your throat.","c":0},{"l":"c","kw":"cat","e":"🐱","tip":"Back of your tongue, a tiny cough: c!","c":0},{"l":"k","kw":"kite","e":"🪁","tip":"Same sound as c: k!","c":0},{"l":"e","kw":"egg","e":"🥚","tip":"Little smile, jaw a bit open: e, like in egg.","c":0},{"l":"u","kw":"umbrella","e":"☂️","tip":"Relax your mouth: u, like in umbrella.","c":0},{"l":"r","kw":"rabbit","e":"🐰","tip":"Round your lips a little and growl: rrr.","c":1},{"l":"h","kw":"hat","e":"🎩","tip":"Open mouth and huff, like fogging a window: h.","c":0},{"l":"b","kw":"ball","e":"⚽","tip":"Lips together, pop with your voice on: b!","c":0},{"l":"f","kw":"fish","e":"🐟","tip":"Top teeth on your bottom lip. Blow: fff.","c":1},{"l":"l","kw":"lion","e":"🦁","tip":"Tongue tip up behind your teeth: lll.","c":1},{"l":"j","kw":"jellyfish","e":"🪼","tip":"Lips forward, quick: j!","c":0},{"l":"v","kw":"van","e":"🚐","tip":"Top teeth on your bottom lip. Buzz: vvv.","c":1},{"l":"w","kw":"web","e":"🕸️","tip":"Round your lips like a little kiss: w.","c":0},{"l":"x","kw":"fox","e":"🦊","tip":"x says ks, like at the end of fox.","c":0},{"l":"y","kw":"yo-yo","e":"🪀","tip":"Smile, tongue high: y, like in yo-yo.","c":0},{"l":"z","kw":"zebra","e":"🦓","tip":"Teeth together. Buzz like a bee: zzz.","c":1},{"l":"q","kw":"queen","e":"👑","tip":"q and u go together: kw, like in queen.","c":0}],"groups":[["s","a","t","p"],["i","n","m","d"],["g","o","c","k"],["e","u","r","h"],["b","f","l","j"],["v","w","x","y","z","q"]],"cvc":[["sat","🪑"],["tap","🚰"],["map","🗺️"],["nap","😴"],["pin","📌"],["tin","🥫"],["sit","🧘"],["pig","🐷"],["dad","👨"],["dig","⛏️"],["dog","🐶"],["cat","🐱"],["hot","🔥"],["pot","🍲"],["kid","🧒"],["hen","🐔"],["ten","🔟"],["red","🔴"],["sun","☀️"],["cup","🥤"],["bus","🚌"],["bed","🛏️"],["fox","🦊"],["box","📦"],["log","🪵"],["jam","🍓"],["van","🚐"],["web","🕸️"],["yes","👍"],["zip","🤐"]],"sight":["the","a","I","is","see","and","to","my","we","can","like","go","you","he","she","it","in","up","look","said"],"stories":[{"id":"sam","t":"Sam the Cat","e":"🐱","pages":["Sam is a cat.","Sam sat on a mat.","Sam can see a rat.","The rat ran!","Sam naps on the mat."],"pics":["🐱","🧶","🐀","💨","😴"],"q":{"q":"What did Sam see?","opts":[["rat","🐀"],["dog","🐶"],["fish","🐟"]],"a":0}},{"id":"pig","t":"Pig in the Mud","e":"🐷","pages":["A pig is in the mud.","The pig can dig.","The pig is hot.","Hop in the tub, pig!","The pig is not hot."],"pics":["🐷","⛏️","🥵","🛁","😊"],"q":{"q":"What can the pig do?","opts":[["sing","🎤"],["dig","⛏️"],["fly","🪁"]],"a":1}},{"id":"bus","t":"The Red Bus","e":"🚌","pages":["I see a red bus.","Mom and Dad get on the bus.","I can sit up on top.","The bus can go!","Look! We can see the sun."],"pics":["🚌","👨‍👩‍👧","🪑","💨","☀️"],"q":{"q":"What color is the bus?","opts":[["blue","🔵"],["green","🟢"],["red","🔴"]],"a":2}},{"id":"fox","t":"Fox and Hen","e":"🦊","pages":["A fox is in a box.","A hen is in a pen.","The fox can hop.","The hen can run!","The fox and hen sit in the sun."],"pics":["📦","🐔","🦘","🏃","☀️"],"q":{"q":"What can the hen do?","opts":[["run","🏃"],["swim","🏊"],["read","📖"]],"a":0}}]};
+// ---------- Learn to Read (original content; sounds are General American English) ----------
+const RKEY="little-letters-read-v1";const RP=Object.assign({heard:{},blend:{},sight:{},story:{},mic:false},JSON.parse(localStorage.getItem(RKEY)||"{}"));const rsave=()=>{try{localStorage.setItem(RKEY,JSON.stringify(RP))}catch(e){}};
+const AB={};let rTok=0;
+async function abuf(n){if(AB[n])return AB[n];const a=ac();if(!a)throw 0;const r=await fetch("audio/"+n+".mp3");if(!r.ok)throw 0;const b=await r.arrayBuffer();AB[n]=await new Promise((ok,no)=>a.decodeAudioData(b,ok,no));return AB[n]}
+let rSrc=null;
+function clip(n,fallback){return new Promise(async res=>{const a=ac();try{if(a&&a.state==="suspended")await a.resume();const b=await abuf(n);try{rSrc&&rSrc.stop()}catch(e){}const s=a.createBufferSource();s.buffer=b;s.connect(a.destination);s.onended=()=>res();rSrc=s;s.start();setTimeout(res,b.duration*1000+400)}catch(e){if(fallback){say(fallback);setTimeout(res,900)}else res()}})}
+const wkey=w=>"w_"+w.toLowerCase().replace(/[^a-z]/g,"");
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function seq(list){const my=++rTok;for(const it of list){if(my!==rTok)return false;if(typeof it==="number")await wait(it);else if(typeof it==="function")it();else await clip(it[0],it[1])}return my===rTok}
+function rStop(){rTok++;try{rSrc&&rSrc.stop()}catch(e){}}
+const LBY=Object.fromEntries(RD.letters.map(x=>[x.l,x]));
+function sticker(){ding([660,880,1100,1320],.08);confetti&&confetti();addStar(1)}
+function rbar(back,title){return `<div class="bar"><button class="rback" data-rb="${back}">${back==="home"?"🏠":"⬅️"}</button><span class="rtitle">${title}</span><span class="sp"></span><span class="stars">⭐ ${S.stars}</span></div>`}
+function rShow(html){rStop();$("#rbody").innerHTML=html;$("#rbody").scrollTop=0;window.scrollTo(0,0);$("#read").scrollTop=0;
+ $("#rbody").querySelectorAll("[data-rb]").forEach(b=>b.onclick=()=>{const g=b.dataset.rb;g==="home"?home():g==="map"?rMap():g==="blend"?rBlendList():g==="sight"?rSightList():g==="stories"?rStoryList():rGroup(+g)})}
+function openRead(){show("read","write");rMap()}
+function grpDone(i){return RD.groups[i].filter(l=>RP.heard[l]).length}
+function rMap(){const G=RD.groups.map((g,i)=>{const d=grpDone(i),all=d===g.length;return `<button class="rstep ${all?"done":""}" data-g="${i}"><b>${g.join(" ")}</b><small>${all?"🌟":"🔊 "+d+"/"+g.length}</small></button>`}).join("");
+ const nb=Object.keys(RP.blend).length,ns=Object.keys(RP.sight).length,nt=Object.keys(RP.story).length;
+ rShow(rbar("home","📖 Learn to Read")+`<div class="rmap"><div class="rlab">1 · Letter sounds</div><div class="rpath">${G}</div>
+ <div class="rlab">2 · Sound it out</div><div class="rpath"><button class="rstep big ${nb>=RD.cvc.length?"done":""}" id="goBlend"><b>c·a·t ➜ cat</b><small>${nb?"🌟 ":""}${nb}/${RD.cvc.length}</small></button></div>
+ <div class="rlab">3 · Sight words</div><div class="rpath"><button class="rstep big ${ns>=RD.sight.length?"done":""}" id="goSight"><b>the · I · see</b><small>${ns?"🌟 ":""}${ns}/${RD.sight.length}</small></button></div>
+ <div class="rlab">4 · Little books</div><div class="rpath">${RD.stories.map(s=>`<button class="rstep ${RP.story[s.id]?"done":""}" data-st="${s.id}"><b>${s.e}</b><small>${RP.story[s.id]?"🌟 ":""}${s.t}</small></button>`).join("")}</div></div>`);
+ $("#rbody").querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>rGroup(+b.dataset.g));$("#goBlend").onclick=rBlendList;$("#goSight").onclick=rSightList;$("#rbody").querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>rStory(b.dataset.st,0))}
+// 1. letter sounds
+function rGroup(i){const g=RD.groups[i];rShow(rbar("map","🔊 Letter sounds")+`<p class="rhint">Tap a letter to hear its sound!</p><div class="rgrid">${g.map(l=>`<button class="rlet ${RP.heard[l]?"done":""}" data-l="${l}">${l}<small>${LBY[l].e}</small></button>`).join("")}</div>`+(i<RD.groups.length-1?`<div class="rnav"><button class="rgo" id="nextG">Next letters ➡️</button></div>`:""));
+ $("#rbody").querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>rLetter(i,b.dataset.l));const n=$("#nextG");if(n)n.onclick=()=>rGroup(i+1)}
+function rLetter(gi,l){const L=LBY[l],g=RD.groups[gi],k=g.indexOf(l);
+ rShow(rbar(String(gi),"🔊 Letter sounds")+`<div class="rcard"><div class="rbigl">${l.toUpperCase()}${l}</div><div class="rpic">${L.e}</div>
+ <div class="rrow"><button class="rgo" id="lSnd">🔊 ${l}</button><button class="rgo alt" id="lKw">${L.e} ${L.kw}</button></div><p class="rtip">👄 ${L.tip}</p>${L.c?`<p class="rtip small">🐢 This is a <b>slow</b> sound — you can stretch it out!</p>`:`<p class="rtip small">⚡ This is a <b>quick</b> sound — say it short!</p>`}
+ <div class="rnav"><button id="lPrev" ${k>0?"":"disabled"}>⬅️</button><button id="lNext">${k<g.length-1?"➡️":"✅"}</button></div></div>`);
+ const kw=()=>seq([["s_"+l],350,["s_"+l],250,["x_as_in","as in"],100,[wkey(L.kw),L.kw]]).then(ok=>{if(ok&&!RP.heard[l]){RP.heard[l]=1;rsave();sticker();toast("🌟 You learned "+l+"!")}});
+ $("#lSnd").onclick=()=>seq([["s_"+l]]);$("#lKw").onclick=kw;$("#lPrev").onclick=()=>rLetter(gi,g[k-1]);$("#lNext").onclick=()=>k<g.length-1?rLetter(gi,g[k+1]):rGroup(gi);setTimeout(kw,300)}
+// 2. blending with a sound slider
+function rBlendList(){rShow(rbar("map","🔗 Sound it out")+`<p class="rhint">Pick a word. Slide your finger under the letters!</p><div class="rgrid words">${RD.cvc.map(([w])=>`<button class="rlet word ${RP.blend[w]?"done":""}" data-w="${w}">${w}${RP.blend[w]?"<small>🌟</small>":""}</button>`).join("")}</div>`);$("#rbody").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>rBlend(b.dataset.w))}
+function rBlend(w){const i=RD.cvc.findIndex(x=>x[0]===w),em=RD.cvc[i][1],ls=w.split("");
+ rShow(rbar("blend","🔗 Sound it out")+`<div class="rcard"><div class="rpic hidden" id="bPic">🎁</div><div class="bword" id="bWord">${ls.map((c,j)=>`<span class="bl" data-j="${j}">${c}</span>`).join("")}</div>
+ <div class="slider" id="bTrack"><div class="dots">${ls.map((c,j)=>`<i data-j="${j}"></i>`).join("")}<i class="end">➜</i></div><div class="knob" id="bKnob">👆</div></div>
+ <div class="rrow"><button class="rgo" id="bSlow">🐢 Slowly</button><button class="rgo alt" id="bFast">⚡ Fast</button></div><div id="sayBox"></div>
+ <div class="rnav"><button id="bPrev" ${i>0?"":"disabled"}>⬅️</button><button id="bNext">➡️</button></div></div>`);
+ const T=$("#bTrack"),K=$("#bKnob"),spans=[...$("#bWord").children];let played=new Set(),done=false;
+ const hl=j=>spans.forEach((s,k)=>s.classList.toggle("on",k===j));
+ const reveal=()=>{$("#bPic").textContent=em;$("#bPic").classList.remove("hidden");spans.forEach(s=>s.classList.add("on"));if(!done){done=true;sayIt(w,()=>{if(!RP.blend[w]){RP.blend[w]=1;rsave();sticker()}})}};
+ const fast=()=>seq([()=>spans.forEach(s=>s.classList.add("on")),["x_blend","Now say it fast!"],150,[wkey(w),w],reveal]);
+ const slow=()=>seq([...ls.flatMap((c,j)=>[()=>{hl(j);K.style.left=(j+.5)/(ls.length+.6)*100+"%"},["s_"+c],250]),()=>{K.style.left="94%"},300,[wkey(w),w],reveal]);
+ let drag=false;const mv=e=>{if(!drag)return;const r=T.getBoundingClientRect(),f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));K.style.left=(f*94)+"%";const j=Math.floor(f*(ls.length+.6));if(j<ls.length&&!played.has(j)){played.add(j);hl(j);rStop();clip("s_"+ls[j])}if(f>.9&&played.size>=ls.length&&!played.has("end")){played.add("end");seq([150,[wkey(w),w],reveal])}};
+ T.addEventListener("pointerdown",e=>{e.preventDefault();drag=true;played=new Set();try{T.setPointerCapture(e.pointerId)}catch(_){}mv(e)});T.addEventListener("pointermove",mv);const up=()=>{drag=false};T.addEventListener("pointerup",up);T.addEventListener("pointercancel",up);
+ $("#bSlow").onclick=slow;$("#bFast").onclick=fast;$("#bPrev").onclick=()=>rBlend(RD.cvc[i-1][0]);$("#bNext").onclick=()=>rBlend(RD.cvc[(i+1)%RD.cvc.length][0]);setTimeout(slow,400)}
+// 3. Say it (optional mic, parent opt-in; otherwise self-check)
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const SAME={to:["to","two","too","2"],i:["i","eye","aye"],see:["see","sea","c"],you:["you","u","ewe"],red:["red","read"],sun:["sun","son"],ten:["ten","10"],a:["a","uh","ah"],the:["the","duh","thuh"],it:["it"],in:["in","inn"],yes:["yes","yeah"],
+ sat:["sat"],dad:["dad"],hen:["hen"],cup:["cup"],fox:["fox","folks"],box:["box","bocks"],nap:["nap"],pin:["pin","pen"],tin:["tin"],bed:["bed","bad"],web:["web"],zip:["zip"],log:["log"],jam:["jam"],van:["van"],kid:["kid"],bus:["bus"],pot:["pot"],hot:["hot"],dog:["dog"],cat:["cat"],pig:["pig"],dig:["dig"],sit:["sit"],tap:["tap"],map:["map"],he:["he","hee"],go:["go"],up:["up"],my:["my","mi"]};
+function sayIt(w,onWin){const box=$("#sayBox");if(!box)return;const win=()=>{box.innerHTML=`<div class="rwin">🌟 Great reading!</div>`;clip("x_great","Great job!");onWin&&onWin()};
+ if(RP.mic&&SR){box.innerHTML=`<button class="rmic" id="mic">🎤 Say “${w}”</button><small class="rnote">Tap, then say the word</small>`;
+  $("#mic").onclick=()=>{rStop();const r=new SR();r.lang="en-US";r.interimResults=false;r.maxAlternatives=5;let got=false;$("#mic").classList.add("listening");$("#mic").textContent="👂 Listening…";
+   r.onresult=e=>{got=true;const alts=[...e.results[0]].map(a=>a.transcript.toLowerCase().replace(/[^a-z0-9 ]/g,"").trim());const ok=(SAME[w.toLowerCase()]||[w.toLowerCase()]);if(alts.some(a=>a.split(" ").some(x=>ok.includes(x))))win();else{box.innerHTML=`<div class="rtry">💛 Nice try! Listen…</div>`;seq([[wkey(w),w],400]).then(()=>sayIt(w,onWin))}};
+   r.onerror=()=>{if(!got)selfCheck()};r.onend=()=>{if(!got&&$("#mic"))selfCheck()};try{r.start()}catch(e){selfCheck()}}}else selfCheck();
+ function selfCheck(){box.innerHTML=`<div class="rq">🗣️ Your turn! Say “${w}”.<br>Did you say it?</div><div class="rrow"><button class="rgo" id="yes">👍 Yes!</button><button class="rgo alt" id="again">🔁 Hear again</button></div>`;$("#yes").onclick=win;$("#again").onclick=()=>seq([[wkey(w),w]])}}
+// 4. sight words: hear, read, play
+function rSightList(){rShow(rbar("map","👀 Sight words")+`<p class="rhint">These words show up a lot. Learn them by heart!</p><div class="rgrid words">${RD.sight.map(w=>`<button class="rlet word ${RP.sight[w]?"done":""}" data-w="${w}">${w}${RP.sight[w]?"<small>🌟</small>":""}</button>`).join("")}<button class="rlet word game" id="sGame">🎯 Find it!</button></div>`);
+ $("#rbody").querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>rSight(b.dataset.w));$("#sGame").onclick=()=>rFind(0)}
+function rSight(w){const i=RD.sight.indexOf(w);rShow(rbar("sight","👀 Sight words")+`<div class="rcard"><div class="rbigw">${w}</div><div class="rrow"><button class="rgo" id="sHear">🔊 Hear it</button></div><div id="sayBox"></div><div class="rnav"><button id="sPrev" ${i>0?"":"disabled"}>⬅️</button><button id="sNext">➡️</button></div></div>`);
+ $("#sHear").onclick=()=>seq([[wkey(w),w]]);$("#sPrev").onclick=()=>rSight(RD.sight[i-1]);$("#sNext").onclick=()=>rSight(RD.sight[(i+1)%RD.sight.length]);
+ seq([300,[wkey(w),w]]).then(()=>sayIt(w,()=>{if(!RP.sight[w]){RP.sight[w]=1;rsave();sticker()}}))}
+function rFind(n){const pool=RD.sight.slice().sort(()=>Math.random()-.5),t=pool[0],opts=pool.slice(0,3).sort(()=>Math.random()-.5);
+ rShow(rbar("sight","🎯 Find it!")+`<div class="rcard"><p class="rhint">Listen, then tap the word! <span id="fScore">${"⭐".repeat(n)}</span></p><button class="rgo" id="fHear">🔊 Hear again</button><div class="rgrid words find">${opts.map(o=>`<button class="rlet word" data-o="${o}">${o}</button>`).join("")}</div></div>`);
+ const hear=()=>seq([[wkey(t),t]]);$("#fHear").onclick=hear;setTimeout(hear,300);
+ $("#rbody").querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(b.dataset.o===t){b.classList.add("done");ding();if(!RP.sight[t]){RP.sight[t]=1;rsave()}if(n+1>=5){sticker();toast("🎯 5 in a row! Super reader!");setTimeout(rSightList,1200)}else setTimeout(()=>rFind(n+1),800)}else{b.classList.add("nope");boop();setTimeout(()=>b.classList.remove("nope"),500);hear()}})}
+// 5. little decodable books with read-along
+function rStoryList(){rMap()}
+function rStory(id,p){const st=RD.stories.find(s=>s.id===id);if(p>=st.pages.length)return rQuiz(st);const words=st.pages[p].split(" ");
+ rShow(rbar("map",st.e+" "+st.t)+`<div class="rcard book"><div class="pgno">${p+1} / ${st.pages.length}</div><button class="rpic hidden" id="pPic" title="Tap after reading">🎁</button>
+ <div class="ptext" id="pText">${words.map((w,j)=>`<span class="pw" data-j="${j}">${w}</span>`).join(" ")}</div><p class="rtip small">Tap a word to hear it. Read it, then tap 🎁 to see the picture!</p>
+ <div class="rrow"><button class="rgo" id="pRead">▶️ Read to me</button></div><div class="rnav"><button id="pPrev" ${p>0?"":"disabled"}>⬅️</button><button id="pNext">${p<st.pages.length-1?"➡️":"❓"}</button></div></div>`);
+ const sp=[...$("#pText").children];sp.forEach((s,j)=>s.onclick=()=>{rStop();sp.forEach(x=>x.classList.remove("on"));s.classList.add("on");const w=words[j].replace(/[^A-Za-z]/g,"");clip(wkey(w),w)});
+ $("#pPic").onclick=()=>{$("#pPic").textContent=st.pics[p];$("#pPic").classList.remove("hidden");ding([784,988],.08)};
+ $("#pRead").onclick=()=>seq([...sp.flatMap((s,j)=>[()=>{sp.forEach(x=>x.classList.remove("on"));s.classList.add("on")},[wkey(words[j].replace(/[^A-Za-z]/g,"")),words[j]],120]),()=>sp.forEach(x=>x.classList.add("on")),400,["p_"+id+p,st.pages[p]],()=>sp.forEach(x=>x.classList.remove("on"))]);
+ $("#pPrev").onclick=()=>rStory(id,p-1);$("#pNext").onclick=()=>rStory(id,p+1);if(p===0)seq([300,["t_"+id,st.t]])}
+function rQuiz(st){const q=st.q;rShow(rbar("map",st.e+" "+st.t)+`<div class="rcard"><div class="rq">❓ ${q.q}</div><div class="rgrid">${q.opts.map(([w,e],i)=>`<button class="rlet" data-i="${i}">${e}<small>${w}</small></button>`).join("")}</div><div class="rnav"><button id="qBack">⬅️ Read again</button></div></div>`);
+ $("#qBack").onclick=()=>rStory(st.id,0);seq([300,["q_"+st.id,q.q]]);
+ $("#rbody").querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,w=q.opts[i][0];if(i===q.a){b.classList.add("done");seq([[wkey(w),w],["x_great","Great job!"]]);if(!RP.story[st.id]){RP.story[st.id]=1;rsave();sticker()}toast("📚 You read "+st.t+"!");setTimeout(rMap,2200)}else{b.classList.add("nope");seq([[wkey(w),w],["x_try","Let's try again together."]]);setTimeout(()=>b.classList.remove("nope"),600)}})}
+</script>
+</body></html>
