@@ -96,6 +96,13 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 #mirrorline{position:absolute;top:0;bottom:0;left:50%;border-left:3px dashed rgba(255,79,163,.5);pointer-events:none}
 .bgp{font-size:22px!important}
 @media (orientation:landscape){#pal,#dopts{flex-wrap:nowrap!important;overflow-x:auto;touch-action:pan-x}#draw .sw{width:48px;min-width:48px!important;height:48px;min-height:48px!important}#draw button{min-width:54px;min-height:54px;font-size:26px}#draw .bar{padding:6px 0}}
+.clearBtn{background:#ffcdd2!important;color:#b71c1c!important;font-weight:800;font-size:24px!important;padding:0 14px!important;min-height:64px!important;min-width:96px!important;white-space:nowrap;border:3px solid #e57373!important}
+#clrPop{position:fixed;inset:0;background:rgba(74,59,107,.45);display:none;align-items:center;justify-content:center;z-index:70;padding:20px}#clrPop.show{display:flex}
+#clrPop .clrCard{height:auto;background:#fff;border-radius:36px;padding:22px 26px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:92vw}
+#clrPop .q{font-size:clamp(30px,6vw,44px);font-weight:800;margin-bottom:16px}
+#clrPop .yn{display:flex;gap:24px;justify-content:center}#clrPop .yn button{width:clamp(110px,24vw,150px);height:clamp(110px,24vw,150px);font-size:clamp(56px,12vw,76px);border-radius:32px}
+#clrYes{background:#b9f6ca!important}#clrNo{background:#ffcdd2!important}
+#clrUndo{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:65;display:none;font-size:30px;font-weight:800;padding:0 26px;min-height:76px;background:#fff3c4;border:4px solid #ffb300}#clrUndo.show{display:block}
 </style></head><body>
 <canvas id="fx"></canvas><div id="toast"></div><div id="bubble"></div>
 
@@ -121,7 +128,7 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 </section>
 
 <section class="scr" id="trace">
- <div class="top bar"><button id="tback">⬅️</button><span id="tpic"></span><span id="tword"></span><span class="sp"></span><span id="tmode"></span><span class="stars"></span></div>
+ <div class="top bar"><button id="tback">⬅️</button><span id="tpic"></span><span id="tword"></span><button id="tclear2" class="clearBtn" title="Clear the page">🗑️ Clear</button><span class="sp"></span><span id="tmode"></span><span class="stars"></span></div>
  <div id="tcwrap"><canvas id="tcv"></canvas></div>
  <div class="tbtns"><button id="tprev" title="Back">⏮️</button><button id="thear" title="Hear it">🔊</button><button id="tclear" title="Clear">🧽</button><button id="tcheck" title="Done">✅</button><button id="tfree" class="hide" title="Write on my own">🖍️</button><button id="tnext" title="Next">⏭️</button></div>
 </section>
@@ -145,6 +152,8 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
  
 </section>
 
+<div id="clrPop"><div class="clrCard"><div class="q">🗑️ Clear the page?</div><div class="yn"><button id="clrYes" aria-label="Yes, clear">✔️</button><button id="clrNo" aria-label="No, keep it">✖️</button></div></div></div>
+<button id="clrUndo">↩️ Undo</button>
 <section class="scr" id="gallery">
  <div class="bar"><button data-go="draw">🎨</button><button data-go="home">🏠</button><span style="font-size:40px">🖼️</span></div>
  <div id="ggrid"></div>
@@ -309,7 +318,7 @@ function renderStars(){document.querySelectorAll(".stars").forEach(e=>e.textCont
 function cheer(){const w=isTe()?TE_CHEER:["Great job!","Wow!","You did it!","Super!","Amazing!","Yay!"];return w[Math.floor(Math.random()*w.length)]}
 
 // ---------- screens ----------
-function show(id,music){document.querySelectorAll(".scr").forEach(s=>s.classList.toggle("on",s.id===id));if(music)Music.play(music);window.scrollTo(0,0)}
+function show(id,music){try{hideUndo();document.getElementById("clrPop").classList.remove("show")}catch(e){}document.querySelectorAll(".scr").forEach(s=>s.classList.toggle("on",s.id===id));if(music)Music.play(music);window.scrollTo(0,0)}
 function home(){show("home","home");renderStars()}
 
 // ---------- tracing canvas ----------
@@ -318,7 +327,7 @@ function sizeCanvas(cv){const r=cv.getBoundingClientRect();cv.width=Math.round(r
 const TR={chars:[],idx:0,mode:"trace",ink:[],cur:null,g:null,list:[],word:null,wi:0};
 function openTrace(list,i,word){TR.list=list;TR.idx=i;TR.word=word||null;TR.wi=0;TR.mode="trace";show("trace","write");setupTrace()}
 function curChar(){return TR.word?wparts(TR.word)[TR.wi]:TR.list[TR.idx]}
-function setupTrace(){const ch=curChar();TR.g=glyph(ch);TR.ink=[];TR.cur=null;const cv=$("#tcv");sizeCanvas(cv);drawTrace();if(TR.g.font&&document.fonts)document.fonts.load("80px NotoTe",ch).then(()=>{TR.g.mask=false;drawTrace()});
+function setupTrace(){try{hideUndo()}catch(e){}const ch=curChar();TR.g=glyph(ch);TR.ink=[];TR.cur=null;const cv=$("#tcv");sizeCanvas(cv);drawTrace();if(TR.g.font&&document.fonts)document.fonts.load("80px NotoTe",ch).then(()=>{TR.g.mask=false;drawTrace()});
  const isNum=/^\d+$/.test(ch);let label,pic;
  if(TR.word){label=TR.word[0];pic=TR.word[1];$("#tword").innerHTML=wparts(TR.word).map((c,i)=>`<span class="${i<TR.wi?"done":i===TR.wi?"now":""}">${c}</span>`).join("")}
  else if(isTe()){const n=teNum(ch);if(n>=0){pic="🔵".repeat(n)||"⭕";$("#tword").textContent=TE_NUMW[n]}else{const I=TE_INFO[ch];pic=I?I[1]:"✨";$("#tword").textContent=I?I[0]:ch}}
@@ -410,7 +419,7 @@ function openDraw(){show("draw","draw");const pc=$("#pcv");const r=pc.getBoundin
   for(const id of["bgcv","pcv","ocv","scv"]){const c=$("#"+id);c.width=W;c.height=H}if(keep)ctx("pcv").drawImage(keep,0,0,W,H);drawPage(D.page)}
  drawInit=true;drawBG();renderDrawUI();if(!D.undo.length&&!D.cur)snapEnd()}
 function renderDrawUI(){const btn=k=>`<button data-tool="${k}" class="${D.tool===k||(k==="mirror"&&D.mirror)?"on":""}" title="${TOOLS[k][1]}">${TOOLS[k][0]}</button>`;
- $("#dtray").innerHTML=MAIN.map(btn).join("");$("#dtray2").innerHTML=MORE.map(btn).join("");
+ $("#dtray").innerHTML=MAIN.map(btn).join("")+`<button id="dclear2" class="clearBtn" title="Clear the page">🗑️ Clear</button>`;$("#dclear2").onclick=()=>askClear("draw");$("#dtray2").innerHTML=MORE.map(btn).join("");
  document.querySelectorAll("#dtray [data-tool],#dtray2 [data-tool]").forEach(b=>tap(b,()=>pickTool(b.dataset.tool)));
  $("#pal").innerHTML=PAL.map(c=>`<button class="sw ${D.color===c?"on":""}" data-c="${c}" style="background:${c}"></button>`).join("");
  $("#pal").querySelectorAll("button").forEach(b=>tap(b,()=>{D.color=b.dataset.c;if(["eraser","magic","picker"].includes(D.tool))D.tool="marker";sfx("tool");renderDrawUI()}));
@@ -556,7 +565,16 @@ function printPic(){const u=composite(1).toDataURL("image/png"),w=window.open(""
 // wire draw chrome
 tap($("#dundo"),undo);tap($("#dredo"),redo);tap($("#dmore"),()=>{$("#ddrawer").classList.toggle("hide");$("#dmore").textContent=$("#ddrawer").classList.contains("hide")?"➕":"✖️";sfx("tool")});
 tap($("#dsfx"),()=>{D.sfx=!D.sfx;S.sfx=D.sfx;save();renderDrawUI();sfx("tool")});
-$("#dclear").onclick=()=>{if(confirm("Clear the whole picture?")){clearPaint();sfx("magic")}};
+// --- kid-friendly Clear with big confirm + Undo ---
+let clrUndoFn=null;function askClear(kind){const p=$("#clrPop");p.dataset.k=kind;p.classList.add("show");clearTimeout(askClear.t);askClear.t=setTimeout(()=>p.classList.remove("show"),8000)}
+function hideUndo(){$("#clrUndo").classList.remove("show");clrUndoFn=null}
+function doClear(kind){$("#clrPop").classList.remove("show");if(kind==="trace"){const saved=TR.ink.slice();TR.ink=[];drawTrace();clrUndoFn=()=>{TR.ink=saved.concat(TR.ink);drawTrace()};ding([660,440],.08)}else{clearPaint();clrUndoFn=()=>undo();sfx("magic")}
+ const u=$("#clrUndo");u.classList.add("show");clearTimeout(doClear.t);doClear.t=setTimeout(hideUndo,7000)}
+$("#clrYes").onclick=()=>doClear($("#clrPop").dataset.k);$("#clrNo").onclick=()=>{clearTimeout(askClear.t);$("#clrPop").classList.remove("show")};
+$("#clrPop").addEventListener("click",e=>{if(e.target.id==="clrPop")$("#clrPop").classList.remove("show")});
+$("#clrUndo").onclick=()=>{if(clrUndoFn)clrUndoFn();hideUndo()};
+$("#dclear").onclick=()=>askClear("draw");$("#tclear2").onclick=()=>askClear("trace");
+$("#pcv").addEventListener("pointerdown",()=>{if(clrUndoFn&&$("#clrPop").dataset.k==="draw")hideUndo()});
 $("#dpages").innerHTML=`<button data-page="">⬜</button>`+Object.keys(PAGES).map(k=>`<button data-page="${k}">${PAGE_EMO[k]}</button>`).join("");
 $("#dpages").querySelectorAll("button").forEach(b=>tap(b,()=>{D.page=b.dataset.page||null;drawPage(D.page);if(D.page){D.tool="fill";renderDrawUI();say("Tap a space to color it in!")}sfx("tool")}));
 $("#dsave").onclick=saveGallery;$("#ddl").onclick=downloadPNG;$("#dprint").onclick=printPic;
@@ -615,7 +633,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!
  ({home,letters:()=>openLetters(),words:openWords,draw:openDraw,games:()=>show("games","games"),gallery:openGallery})[g]?.()});
 $("#musicBtn").onclick=()=>{Music.set(!S.music);toggles();Music.start()};$("#voiceBtn").onclick=()=>{S.voice=!S.voice;save();toggles();if(S.voice)say("Hi!")};
 document.querySelectorAll("#ltabs button").forEach(b=>b.onclick=()=>openLetters(b.dataset.set));
-$("#thear").onclick=speakChar;$("#tclear").onclick=()=>{TR.ink=[];drawTrace()};$("#tcheck").onclick=()=>checkTrace(false);
+$("#thear").onclick=speakChar;$("#tclear").onclick=()=>askClear("trace");$("#tcheck").onclick=()=>checkTrace(false);
 $("#tfree").onclick=()=>{TR.mode="free";TR.ink=[];setupTrace();say(T("Now write it by yourself on the lines!","ఇప్పుడు నువ్వే రాయి!"))};
 $("#tnext").onclick=()=>{if(TR.word){const W=WL(),i=W.indexOf(TR.word);openTrace(null,0,W[(i+1)%W.length]);return}TR.mode="trace";TR.idx=(TR.idx+1)%TR.list.length;setupTrace()};
 $("#tprev").onclick=()=>{if(TR.word){const W=WL(),i=W.indexOf(TR.word);openTrace(null,0,W[(i-1+W.length)%W.length]);return}TR.mode="trace";TR.idx=(TR.idx-1+TR.list.length)%TR.list.length;setupTrace()};
