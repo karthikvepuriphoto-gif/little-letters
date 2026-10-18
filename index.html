@@ -391,10 +391,11 @@ function setupTrace(){try{hideUndo()}catch(e){}TR.sid=(TR.sid||0)+1;TR.won=false
  $("#tpic").textContent=pic;{const tp=$("#tpic"),n=(String(pic).match(/\p{Extended_Pictographic}/gu)||[]).length,r=Math.ceil(n/2);if(isNum&&n>3){tp.style.cssText=`white-space:normal;line-height:1;max-width:46vw;font-size:min(clamp(46px,8vw,80px),${(36/r).toFixed(1)}vw)`}else tp.style.cssText=""}$("#tmode").textContent=TR.mode==="trace"?"✏️":"🖍️";$("#tnext").classList.toggle("pulse",false);$("#tfree").classList.toggle("hide",TR.mode!=="trace"||!PR().traced[ch]);
  if(!TR.quiet){const sid=TR.sid;setTimeout(()=>{if(sid===TR.sid)speakChar()},250)}TR.quiet=false}
 // ---- tracing audio: one smooth clip at a time, never cut mid-word, never overlapping ----
-const TA={busy:false,pend:null,src:null,last:-1,chimeT:0,n:{intro:0,praise:0,chime:0}};
-function taPlay(name,text,kind){if(!S.voice)return;const job={name,text,kind,scr:TR.sid,on:(document.querySelector(".scr.on")||{}).id,g:GG.tok};if(TA.busy){TA.pend=job;return}taRun(job)}
-async function taRun(job){if(job.scr!==TR.sid&&job.kind==="intro")return;if(job.kind==="prompt"&&job.g!==GG.tok)return;TA.busy=true;TA.n[job.kind]=(TA.n[job.kind]||0)+1;window.__taLog&&__taLog.push(job);
- let fin=false;const done=()=>{if(fin)return;fin=true;TA.busy=false;TA.src=null;const p=TA.pend;TA.pend=null;if(p&&$("#"+p.on)&&$("#"+p.on).classList.contains("on"))setTimeout(()=>taRun(p),120)};
+const TA={busy:false,pend:[],src:null,last:-1,chimeT:0,n:{intro:0,praise:0,chime:0}};
+function taPlay(name,text,kind){if(!S.voice)return;const job={name,text,kind,scr:TR.sid,on:(document.querySelector(".scr.on")||{}).id,g:GG.tok};if(TA.busy){if(kind==="intro"||kind==="prompt")TA.pend=TA.pend.filter(j=>j.kind!=="intro"&&j.kind!=="prompt");TA.pend.push(job);TA.pend=TA.pend.slice(-3);return}taRun(job)}
+function taNext(){if(TA.busy)return;let p;while((p=TA.pend.shift())){if($("#"+p.on)&&$("#"+p.on).classList.contains("on")){taRun(p);return}}}
+async function taRun(job){if((job.scr!==TR.sid&&job.kind==="intro")||(job.kind==="prompt"&&job.g!==GG.tok))return taNext();TA.busy=true;TA.n[job.kind]=(TA.n[job.kind]||0)+1;window.__taLog&&__taLog.push(job);
+ let fin=false;const done=()=>{if(fin)return;fin=true;TA.busy=false;TA.src=null;setTimeout(taNext,120)};
  const a=ac();
  if(job.name&&a){try{if(a.state==="suspended")await a.resume();const b=await abuf(job.name);const sN=a.createBufferSource(),g=a.createGain();g.gain.value=1;sN.buffer=b;sN.connect(g);g.connect(a.destination);sN.onended=done;TA.src=sN;sN.start();setTimeout(done,b.duration*1000+600);return}catch(e){}}
  // speech fallback (Telugu, or clip unavailable): never cancel; wait for it to finish
