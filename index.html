@@ -289,12 +289,12 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
   <button class="c4" data-game="sound">👂<small>First sound</small></button>
   <button class="c2" data-game="memory">🃏<small>Memory</small></button>
   <button class="c1" data-game="balloon">🎈<small>Pop in order</small></button>
-  <button class="c3" data-game="match">🧩<small>Match it</small></button>
+  <button class="c3" data-game="match">🔗<small>Match it</small></button>
   <button class="c4" data-game="sort">🧺<small>Sort it</small></button>
   <button class="c2" data-game="pattern">🔁<small>What comes next?</small></button>
   <button class="c1" data-game="countm">🧮<small>Count & match</small></button>
   <button class="c3" data-game="odd">🔍<small>Big, small, different</small></button>
-  <button class="c4" data-pz="1">🖼️<small>Picture puzzles</small></button>
+  <button class="c4" data-pz="1">🧩<small>Picture puzzles</small></button>
  </div>
 </section>
 
@@ -790,7 +790,7 @@ function tapDrag(box,onTry){let sel=null,drag=null,st=null;
  box.querySelectorAll("[data-tg]").forEach(tg=>tg.addEventListener("click",()=>{if(sel){const it=sel;clear();onTry(it,tg)}else{tg.classList.add("wig");setTimeout(()=>tg.classList.remove("wig"),400)}}))}
 // 1) Matching
 const BABY=[["🐔","hen","🐣","chick"],["🦋","butterfly","🐛","caterpillar"],["🐕","dog","🐶","puppy"],["🐈","cat","🐱","kitten"]];
-GM.match=function r(){const K="match";kShell(T("Match it","జత చేయి"),"🧩",K);const lv=glv(K),modes=lv<2?["letter"]:lv<5?["letter","case","num"]:["letter","case","num","baby"],m=modes[rnd(modes.length)],n=nOpt(K,2,3,4);
+GM.match=function r(){const K="match";kShell(T("Match it","జత చేయి"),"🔗",K);const lv=glv(K),modes=lv<2?["letter"]:lv<5?["letter","case","num"]:["letter","case","num","baby"],m=modes[rnd(modes.length)],n=nOpt(K,2,3,4);
  let P;if(m==="letter")P=pick(Object.entries(WORDS_FOR).filter(([k])=>k!=="X"),n).map(([k,v])=>[k,`<b class="big">${k}</b>`,`<span class="emo">${v[1]}</span><small>${v[0]}</small>`]);
  else if(m==="case")P=pick(ABC,n).map(k=>[k,`<b class="big">${k}</b>`,`<b class="big">${k.toLowerCase()}</b>`]);
  else if(m==="num"){P=pick([1,2,3,4,5,6].slice(0,lv<8?5:6),n).map(k=>[k,`<b class="big">${k}</b>`,`<span class="dots">${"●".repeat(k)}</span>`])}
@@ -841,7 +841,7 @@ function teSound(){gameShell("మొదటి అక్షరం","👂");const 
 function setLang(l){S.lang=l;save();applyLang();say(l==="te"?"తెలుగు":"English")}
 function applyLang(){$("#langBtn").innerHTML=isTe()?"🇬🇧 English":"తెలుగు";document.documentElement.lang=isTe()?"te":"en";
  const L=isTe()?["అ ఆ ౧ ౨","అమ్మ ఆవు","బొమ్మలు","ఆటలు","చదువు","రంగులు"]:["ABC 123","cat dog","Draw","Play","Read","Colors & fun"];document.querySelectorAll(".hub button small").forEach((e,i)=>e.textContent=L[i]);
- const gl=isTe()?["అక్షరం కనుక్కో","లెక్కపెట్టు","ఆకారాలు","మొదటి అక్షరం","జ్ఞాపకం","వరుస బెలూన్లు","జత చేయి","వేరు చేయి","తర్వాత ఏది?","లెక్కపెట్టి జత చేయి","పెద్దది, చిన్నది"]:["Find the letter","Count","Shapes & colors","First sound","Memory","Pop in order","Match it","Sort it","What comes next?","Count & match","Big, small, different"];document.querySelectorAll(".games button small").forEach((e,i)=>e.textContent=gl[i])}
+ const gl=isTe()?["అక్షరం కనుక్కో","లెక్కపెట్టు","ఆకారాలు","మొదటి అక్షరం","జ్ఞాపకం","వరుస బెలూన్లు","జత చేయి","వేరు చేయి","తర్వాత ఏది?","లెక్కపెట్టి జత చేయి","పెద్దది, చిన్నది","బొమ్మ పజిల్స్"]:["Find the letter","Count","Shapes & colors","First sound","Memory","Pop in order","Match it","Sort it","What comes next?","Count & match","Big, small, different","Picture puzzles"];document.querySelectorAll(".games button small").forEach((e,i)=>{if(gl[i])e.textContent=gl[i]})}
 // ---------- parents ----------
 function openParents(){show("parents","home");const row=(arr)=>arr.map(c=>`<span class="pc ${PR().free[c]?"m2":PR().traced[c]?"m1":""}">${c}</span>`).join("");const s=sets();
  $("#pbody").innerHTML=`<p>⭐ Stars: <b>${S.stars}</b> · Stickers: ${unlockedStickers().length}/${STICKERS.length} · Words: ${Object.keys(PR().words).length}/${WL().length} · Pictures: ${S.gallery.length}</p>

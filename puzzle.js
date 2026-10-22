@@ -43,7 +43,7 @@ const lvName=i=>LV[i][0]*LV[i][1]+" pieces";
 function body(h){tok++;GG.tok++;TA.pend=[];try{TA.src&&TA.src.stop()}catch(e){}$("#pzbody").innerHTML=h}
 function bar(back,title){return `<div class="bar"><button data-pzb="${back}">⬅️</button><span class="stitle">${title}</span><span class="sp"></span><span class="stars">⭐ ${S.stars}</span></div>`}
 function menu(first){show("puzzle","draw");const L=PZ.lv;
- body(bar("games","🖼️ Picture puzzles")+`<div class="pzlv">${LV.map((_,i)=>`<button class="pzl ${i===L?"on":""} ${i>PZ.lv?"lock":""}" data-pzl="${i}">${i>PZ.lv?"🔒":(PZ.cnt[i]>=NEED?"🏅":"🧩")} ${LV[i][0]*LV[i][1]}</button>`).join("")}</div>
+ body(bar("games","🧩 Picture puzzles")+`<div class="pzlv">${LV.map((_,i)=>`<button class="pzl ${i===L?"on":""} ${i>PZ.lv?"lock":""}" data-pzl="${i}">${i>PZ.lv?"🔒":(PZ.cnt[i]>=NEED?"🏅":"🧩")} ${LV[i][0]*LV[i][1]}</button>`).join("")}</div>
  <div class="pzinfo" id="pzinfo"></div><div class="pzgrid" id="pzgrid"></div><button class="mini pzcred" data-pzc="1">ℹ️ Picture credits</button>`);
  grid(PZ.cur??L);if(first)setTimeout(()=>{if(live(tok))V("pz_intro","Pick a picture, then put the pieces together!")},300)}
 function grid(L){PZ.cur=L;document.querySelectorAll("[data-pzl]").forEach(b=>b.classList.toggle("on",+b.dataset.pzl===L));
