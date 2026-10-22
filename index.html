@@ -205,6 +205,21 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 .tch{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:8px 0}.tn{min-width:120px;min-height:110px;font-size:60px;font-weight:800;border-radius:30px;background:#fff3c4}.tn.ok{background:#b9f6ca}
 .tbig{font-size:clamp(60px,12vw,100px);font-weight:800;color:#ff4fa3;line-height:1}
 @media (orientation:landscape) and (max-height:500px){.sgrid button{min-height:110px;font-size:50px}.bowl{width:min(30vh,200px)}.pot{min-height:84px}.tf{width:min(60vw,46vh*2.5,420px)}.tn{min-height:84px;min-width:96px;font-size:44px}.fc{min-height:120px}.fc span{font-size:64px}.xb{min-height:60px}}
+#puzzle{overflow:hidden}#pzbody{display:flex;flex-direction:column;flex:1;min-height:0}
+.pzlv{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:4px 0}.pzl{font-size:26px;padding:0 16px;font-weight:800}.pzl.lock{opacity:.5}
+.pzinfo{text-align:center;font-size:22px;font-weight:700;margin:6px 0}
+.pzgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;padding:6px 4px 14px;overflow:auto;flex:1;min-height:0}
+.pzt{padding:6px;border-radius:22px;position:relative;min-height:0}.pzt img{width:100%;display:block;border-radius:16px;aspect-ratio:4/3}.pzt i{position:absolute;top:2px;right:6px;font-style:normal;font-size:26px}
+.pzcred{align-self:center;font-size:18px;min-height:48px;padding:0 14px;margin-bottom:6px}
+.pzcr{background:#fff;border-radius:24px;padding:10px 20px;font-size:18px;overflow:auto}
+#pzarea{position:relative;flex:1;min-height:0;touch-action:none;overflow:hidden}
+#pzboard{position:absolute;border-radius:18px;background-size:100% 100%;box-shadow:0 0 0 5px #fff,0 8px 20px rgba(0,0,0,.15)}
+#pzboard::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.78);border-radius:18px}
+#pzboard i{position:absolute;outline:2px dashed rgba(122,90,160,.45);outline-offset:-3px;border-radius:12px}
+#pzboard.whole::before{background:transparent;transition:.6s}
+.pzp{position:absolute;left:0;top:0;transform-origin:0 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.7);touch-action:none;cursor:grab;z-index:5}
+.pzp.up{box-shadow:0 12px 24px rgba(0,0,0,.35);transition:none}.pzp.set{box-shadow:none;border-radius:0;transition:transform .15s;cursor:default}
+.pzdone{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:16px;justify-content:center;z-index:999}@media (orientation:landscape){.pzdone{left:auto;right:16px;top:25%;bottom:auto;flex-direction:column}}.pzdone button{font-size:28px;padding:0 22px;min-height:76px;background:#ffe08a}
 </style></head><body>
 <canvas id="fx"></canvas><div id="toast"></div><div id="bubble"></div>
 
@@ -279,6 +294,7 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
   <button class="c2" data-game="pattern">🔁<small>What comes next?</small></button>
   <button class="c1" data-game="countm">🧮<small>Count & match</small></button>
   <button class="c3" data-game="odd">🔍<small>Big, small, different</small></button>
+  <button class="c4" data-pz="1">🖼️<small>Picture puzzles</small></button>
  </div>
 </section>
 
@@ -287,6 +303,7 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
  <div id="gprompt"></div><div id="gbody"></div>
 </section>
 
+<section class="scr" id="puzzle"><div id="pzbody"></div></section>
 <section class="scr" id="studio"><div id="sbody"></div></section>
 <section class="scr" id="read"><div id="rbody"></div></section>
 
@@ -942,4 +959,5 @@ function rQuiz(st){const q=st.q;rShow(rbar("map",st.e+" "+st.t)+`<div class="rca
  $("#rbody").querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,w=q.opts[i][0];if(i===q.a){b.classList.add("done");seq([[wkey(w),w],["x_great","Great job!"]]);if(!RP.story[st.id]){RP.story[st.id]=1;rsave();sticker()}toast("📚 You read "+st.t+"!");setTimeout(rMap,2200)}else{b.classList.add("nope");seq([[wkey(w),w],["x_try","Let's try again together."]]);setTimeout(()=>b.classList.remove("nope"),600)}})}
 </script>
 <script src="studio.js"></script>
+<script src="puzzle.js"></script>
 </body></html>
