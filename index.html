@@ -220,6 +220,38 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 .pzp{position:absolute;left:0;top:0;transform-origin:0 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.7);touch-action:none;cursor:grab;z-index:5}
 .pzp.up{box-shadow:0 12px 24px rgba(0,0,0,.35);transition:none}.pzp.set{box-shadow:none;border-radius:0;transition:transform .15s;cursor:default}
 .pzdone{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:16px;justify-content:center;z-index:999}@media (orientation:landscape){.pzdone{left:auto;right:16px;top:25%;bottom:auto;flex-direction:column}}.pzdone button{font-size:28px;padding:0 22px;min-height:76px;background:#ffe08a}
+
+#mathshare,#wordsearch{overflow:auto}#msbody,#wsbody{display:flex;flex-direction:column;flex:1;min-height:0;padding:0 8px 12px}
+.msintro,.wsintro{text-align:center;font-size:22px;font-weight:700;margin:6px 0 10px;color:#5e35b1}
+.msmodes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0}
+.msm{min-height:160px;font-size:64px;border-radius:32px}.msm small{font-size:22px;line-height:1.2}.msm i{font-style:normal;font-size:16px;opacity:.75;display:block}
+.mslv{background:#fff3e0;border-radius:20px;padding:12px 16px;font-size:18px;font-weight:700;margin:10px 0}
+.msprompt{text-align:center;font-size:clamp(26px,5vw,36px);font-weight:800;color:#6a1b9a;margin:8px 0}
+.msstage{background:#fff;border-radius:28px;padding:14px;margin:6px auto;max-width:720px;min-height:180px;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.msgrid{display:grid;grid-template-columns:repeat(var(--c),auto);gap:8px;justify-content:center;justify-items:center}
+.msi{font-size:clamp(36px,8vw,56px);line-height:1;transition:transform .25s,opacity .25s;display:inline-flex}.msi.off{opacity:.15;transform:scale(.7)}.msi.on{animation:mspop .35s ease}.msi.mini{font-size:28px}
+@keyframes mspop{from{transform:scale(.3)}to{transform:scale(1)}}
+.msgroups{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.msgroup{background:#f3e5f5;border-radius:20px;padding:10px;min-width:100px;text-align:center;opacity:.25;transform:scale(.9);transition:.3s}.msgroup.on{opacity:1;transform:scale(1)}.msgroup small{display:block;font-size:14px;font-weight:700;color:#6a1b9a}
+.mscap{text-align:center;font-size:24px;font-weight:800;margin-top:10px;color:#ef6c00}
+.msask{text-align:center;font-size:26px;font-weight:800;margin:12px 0 6px}
+.msbtns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.msn{min-width:100px;min-height:100px;font-size:48px;font-weight:800;border-radius:28px;background:#fff3c4}.msn.ok{background:#b9f6ca}.msn.no{background:#ffcdd2}
+.msh{align-self:center;margin:6px}
+.msdone{text-align:center;font-size:28px;font-weight:800;margin-top:12px}.msnext{display:flex;gap:12px;justify-content:center;margin-top:10px}.msnext button{font-size:24px;min-height:64px;padding:0 18px;background:#ffe08a;border-radius:22px}
+.mspie{display:flex;justify-content:center;cursor:pointer;touch-action:manipulation}
+.mstoys{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px}.toy.pick{outline:4px solid #7e57c2;border-radius:12px;transform:scale(1.1)}.toy.gone{visibility:hidden}
+.mspiles{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.mspile{background:#e8f5e9;border-radius:20px;padding:10px;min-width:90px;text-align:center;border:3px dashed #81c784}.msface{font-size:40px}.msdrop{min-height:40px}.mspile small{font-weight:800;font-size:20px}
+.mscheck{align-self:center;font-size:28px;min-height:64px;padding:0 24px;background:#b9f6ca;border-radius:22px;margin:8px}
+.wslv{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0}.wsl{font-size:20px;padding:0 14px;font-weight:800;min-height:56px}.wsl.lock{opacity:.5}
+.wsinfo{text-align:center;font-size:20px;font-weight:700;margin:6px}.wsplay{align-self:center;font-size:32px;min-height:80px;padding:0 28px;margin:12px}
+.wswrap{display:flex;flex-direction:column;gap:12px;align-items:center}@media (orientation:landscape){.wswrap{flex-direction:row;align-items:flex-start;justify-content:center}}
+.wslist{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:520px}.wsword{font-size:22px;padding:8px 12px;border-radius:18px;background:#e3f2fd;font-weight:800;display:flex;align-items:center;gap:8px}.wsword span{font-size:32px}.wsword.done{background:#b9f6ca;text-decoration:line-through;opacity:.85}
+.wsgrid{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:6px;background:#fff;padding:12px;border-radius:24px;box-shadow:0 6px 18px rgba(0,0,0,.1);touch-action:none;user-select:none}
+.wsc{width:clamp(48px,12vw,72px);height:clamp(48px,12vw,72px);font-size:clamp(22px,5vw,34px);font-weight:800;border-radius:14px;background:#f3e5f5;color:#4a148c;padding:0}.wsc.sel{background:#ffe082;transform:scale(1.05)}.wsc.found{background:#a5d6a7;color:#1b5e20}
+.wshint{text-align:center;font-size:20px;font-weight:700;margin:8px;color:#6a1b9a}
+.wsdone{display:flex;gap:14px;justify-content:center;margin:12px}.wsdone button{font-size:26px;min-height:70px;padding:0 20px;background:#ffe08a;border-radius:22px}
+
 </style></head><body>
 <canvas id="fx"></canvas><div id="toast"></div><div id="bubble"></div>
 
@@ -295,6 +327,8 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
   <button class="c1" data-game="countm">🧮<small>Count & match</small></button>
   <button class="c3" data-game="odd">🔍<small>Big, small, different</small></button>
   <button class="c4" data-pz="1">🧩<small>Picture puzzles</small></button>
+  <button class="c1" data-ms="1">🥧<small>Multiply & Share</small></button>
+  <button class="c2" data-ws="1">🔎<small>Word search</small></button>
  </div>
 </section>
 
@@ -304,6 +338,8 @@ h1{margin:0;font-size:clamp(34px,6vw,60px);color:#ff4fa3;text-shadow:3px 3px 0 #
 </section>
 
 <section class="scr" id="puzzle"><div id="pzbody"></div></section>
+<section class="scr" id="mathshare"><div id="msbody"></div></section>
+<section class="scr" id="wordsearch"><div id="wsbody"></div></section>
 <section class="scr" id="studio"><div id="sbody"></div></section>
 <section class="scr" id="read"><div id="rbody"></div></section>
 
@@ -841,7 +877,7 @@ function teSound(){gameShell("మొదటి అక్షరం","👂");const 
 function setLang(l){S.lang=l;save();applyLang();say(l==="te"?"తెలుగు":"English")}
 function applyLang(){$("#langBtn").innerHTML=isTe()?"🇬🇧 English":"తెలుగు";document.documentElement.lang=isTe()?"te":"en";
  const L=isTe()?["అ ఆ ౧ ౨","అమ్మ ఆవు","బొమ్మలు","ఆటలు","చదువు","రంగులు"]:["ABC 123","cat dog","Draw","Play","Read","Colors & fun"];document.querySelectorAll(".hub button small").forEach((e,i)=>e.textContent=L[i]);
- const gl=isTe()?["అక్షరం కనుక్కో","లెక్కపెట్టు","ఆకారాలు","మొదటి అక్షరం","జ్ఞాపకం","వరుస బెలూన్లు","జత చేయి","వేరు చేయి","తర్వాత ఏది?","లెక్కపెట్టి జత చేయి","పెద్దది, చిన్నది","బొమ్మ పజిల్స్"]:["Find the letter","Count","Shapes & colors","First sound","Memory","Pop in order","Match it","Sort it","What comes next?","Count & match","Big, small, different","Picture puzzles"];document.querySelectorAll(".games button small").forEach((e,i)=>{if(gl[i])e.textContent=gl[i]})}
+ const gl=isTe()?["అక్షరం కనుక్కో","లెక్కపెట్టు","ఆకారాలు","మొదటి అక్షరం","జ్ఞాపకం","వరుస బెలూన్లు","జత చేయి","వేరు చేయి","తర్వాత ఏది?","లెక్కపెట్టి జత చేయి","పెద్దది, చిన్నది","బొమ్మ పజిల్స్","గుణకారం & పంచుకో","పదాలు వెతుకు"]:["Find the letter","Count","Shapes & colors","First sound","Memory","Pop in order","Match it","Sort it","What comes next?","Count & match","Big, small, different","Picture puzzles","Multiply & Share","Word search"];document.querySelectorAll(".games button small").forEach((e,i)=>{if(gl[i])e.textContent=gl[i]})}
 // ---------- parents ----------
 function openParents(){show("parents","home");const row=(arr)=>arr.map(c=>`<span class="pc ${PR().free[c]?"m2":PR().traced[c]?"m1":""}">${c}</span>`).join("");const s=sets();
  $("#pbody").innerHTML=`<p>⭐ Stars: <b>${S.stars}</b> · Stickers: ${unlockedStickers().length}/${STICKERS.length} · Words: ${Object.keys(PR().words).length}/${WL().length} · Pictures: ${S.gallery.length}</p>
@@ -960,4 +996,6 @@ function rQuiz(st){const q=st.q;rShow(rbar("map",st.e+" "+st.t)+`<div class="rca
 </script>
 <script src="studio.js"></script>
 <script src="puzzle.js"></script>
+<script src="mathshare.js"></script>
+<script src="wordsearch.js"></script>
 </body></html>
